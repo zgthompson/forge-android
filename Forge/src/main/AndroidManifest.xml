@@ -22,6 +22,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.pockwester.forge.ClassIndexActivity"
+            android:label="@string/title_activity_class_index" >
+        </activity>
     </application>
 
 </manifest>

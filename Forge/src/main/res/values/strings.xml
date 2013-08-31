@@ -4,5 +4,6 @@
     <string name="app_name">Forge</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_class_index">ClassIndexActivity</string><string name="class_index_temp">This will be a list of classes</string>
 
 </resources>
