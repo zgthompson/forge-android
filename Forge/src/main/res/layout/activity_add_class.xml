@@ -6,24 +6,12 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context=".ClassIndexActivity">
+    tools:context=".AddClassActivity">
 
     <TextView
+        android:id="@+id/class_test"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/class_index_temp"
-        android:id="@+id/textView"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Add a class"
-        android:id="@+id/button"
-        android:layout_below="@+id/textView"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
-        android:onClick="openAddClass" />
+        android:text="@string/hello_world" />
 
 </RelativeLayout>
