@@ -8,9 +8,14 @@ import android.view.Menu;
 import android.widget.TextView;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.message.BasicNameValuePair;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 public class AddClassActivity extends Activity {
 
@@ -18,7 +23,10 @@ public class AddClassActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_class);
-        new NetworkTask().execute("http://arthurwut.com/pockwester/mysql/get_class_subjects.php");
+
+        // Execute request for classes in the background
+        new NetworkTask().execute(new BasicNameValuePair("apikey", Constants.API_KEY),
+                new BasicNameValuePair("apitask", "get_classes"));
     }
 
 
@@ -29,12 +37,19 @@ public class AddClassActivity extends Activity {
         return true;
     }
 
-    private class NetworkTask extends AsyncTask<String, Void, HttpResponse> {
+    private class NetworkTask extends AsyncTask<NameValuePair, Void, HttpResponse> {
         @Override
-        protected HttpResponse doInBackground(String... urls) {
+        protected HttpResponse doInBackground(NameValuePair... params) {
+
             AndroidHttpClient client = AndroidHttpClient.newInstance("Android");
+
             try {
-                return client.execute(new HttpGet(urls[0]));
+                // set url
+                HttpPost httpPost = new HttpPost(Constants.API_ROOT);
+                // set params
+                httpPost.setEntity(new UrlEncodedFormEntity(Arrays.asList(params)));
+                // fire away
+                return client.execute(httpPost);
             } catch (IOException e) {
                 e.printStackTrace();
                 return null;
@@ -48,7 +63,11 @@ public class AddClassActivity extends Activity {
             //Do something with result
             if (result != null) {
                 TextView textView = (TextView) findViewById(R.id.class_test);
-                textView.setText("Classes found!");
+                try {
+                    textView.setText(Utility.inputStreamToString(result.getEntity().getContent()));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
 
         }

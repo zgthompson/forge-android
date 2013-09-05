@@ -23,7 +23,7 @@ public class ClassIndexActivity extends Activity {
     }
 
     public void openAddClass(View v) {
-        Intent intent = new Intent(this, AddClassActivity.class);
+        Intent intent = new Intent(this, SearchClassActivity.class);
         startActivity(intent);
     }
 }
