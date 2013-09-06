@@ -8,7 +8,7 @@ import java.io.InputStreamReader;
 /**
  * Created by zack on 9/5/13.
  */
-public class Utility {
+public class Utilities {
 
     public static StringBuilder inputStreamToString(InputStream is) {
         String line = "";

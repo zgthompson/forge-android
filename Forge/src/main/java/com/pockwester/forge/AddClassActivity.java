@@ -10,7 +10,6 @@ import android.widget.TextView;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.message.BasicNameValuePair;
 
@@ -64,7 +63,7 @@ public class AddClassActivity extends Activity {
             if (result != null) {
                 TextView textView = (TextView) findViewById(R.id.class_test);
                 try {
-                    textView.setText(Utility.inputStreamToString(result.getEntity().getContent()));
+                    textView.setText(Utilities.inputStreamToString(result.getEntity().getContent()));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
