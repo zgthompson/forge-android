@@ -1,5 +1,7 @@
 package com.pockwester.forge;
 
+import android.util.Log;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,7 +12,7 @@ import java.io.InputStreamReader;
  */
 public class Utilities {
 
-    public static StringBuilder inputStreamToString(InputStream is) {
+    public static String inputStreamToString(InputStream is) {
         String line = "";
         StringBuilder total = new StringBuilder();
 
@@ -23,11 +25,12 @@ public class Utilities {
                 total.append(line);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e("forge", "IOException in Utilities.inputStreamToString", e);
             return null;
         }
 
         // Return full string
-        return total;
+        return total.toString();
     }
+
 }

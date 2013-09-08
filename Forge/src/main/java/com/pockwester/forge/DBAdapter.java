@@ -11,17 +11,18 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DBAdapter {
 
-    public static final String DATABASE_NAME = "forge";
+    public static final String DATABASE_NAME = "forge.db";
     public static final int DATABASE_VERSION = 1;
 
     private static final String CREATE_TABLE_COURSES = "create table courses (_id integer primary key autoincrement, "
-            + CoursesDBAdapter.COURSE_ID +" TEXT,"
-            + CoursesDBAdapter.COURSE_NUMBER +" TEXT,"
-            + CoursesDBAdapter.COURSE_TYPE+" TEXT,"
-            + CoursesDBAdapter.SECTION_NUMBER+" TEXT,"
-            + CoursesDBAdapter.TITLE+" TEXT,"
-            + CoursesDBAdapter.TIME+" TEXT,"
-            + CoursesDBAdapter.LOCATION+" TEXT,"
+            + CoursesDBAdapter.COURSE_ID + " TEXT,"
+            + CoursesDBAdapter.COURSE_NUMBER + " TEXT,"
+            + CoursesDBAdapter.COURSE_TYPE + " TEXT,"
+            + CoursesDBAdapter.SECTION_NUMBER+ " TEXT,"
+            + CoursesDBAdapter.UNITS + " TEXT,"
+            + CoursesDBAdapter.TITLE + " TEXT,"
+            + CoursesDBAdapter.TIME + " TEXT,"
+            + CoursesDBAdapter.LOCATION + " TEXT,"
             + CoursesDBAdapter.INSTRUCTOR + " TEXT" + ");";
 
 

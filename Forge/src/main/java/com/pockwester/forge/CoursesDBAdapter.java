@@ -11,13 +11,14 @@ import android.database.sqlite.SQLiteOpenHelper;
  * Created by zack on 9/6/13.
  */
 
-public class CoursesDBAdapter extends DBAdapter {
+public class CoursesDBAdapter {
 
     public static final String ROW_ID = "_id";
     public static final String COURSE_ID = "course_id";
     public static final String COURSE_NUMBER = "course_number";
     public static final String COURSE_TYPE = "course_type";
     public static final String SECTION_NUMBER = "section_number";
+    public static final String UNITS = "units";
     public static final String TITLE= "title";
     public static final String TIME = "time";
     public static final String LOCATION = "location";
@@ -46,7 +47,6 @@ public class CoursesDBAdapter extends DBAdapter {
     }
 
     public CoursesDBAdapter(Context context) {
-        super(context);
         mCtx = context;
     }
 
@@ -80,13 +80,14 @@ public class CoursesDBAdapter extends DBAdapter {
      * @return rowId or -1 if failed
      */
     public long createCourse(String course_id, String course_number, String course_type,
-                             String section_number, String title, String time, String location,
-                             String instructor) {
+                             String section_number, String units, String title, String time,
+                             String location, String instructor) {
         ContentValues initialValues = new ContentValues();
         initialValues.put(COURSE_ID, course_id);
         initialValues.put(COURSE_NUMBER, course_number);
         initialValues.put(COURSE_TYPE, course_type);
         initialValues.put(SECTION_NUMBER, section_number);
+        initialValues.put(UNITS, units);
         initialValues.put(TITLE, title);
         initialValues.put(TIME, time);
         initialValues.put(LOCATION, location);
@@ -113,7 +114,7 @@ public class CoursesDBAdapter extends DBAdapter {
     public Cursor getAllCourses() {
 
         return mDb.query(DATABASE_TABLE, new String[] { ROW_ID,
-                COURSE_ID, COURSE_NUMBER, COURSE_TYPE, SECTION_NUMBER, TITLE, TIME, LOCATION,
+                COURSE_ID, COURSE_NUMBER, COURSE_TYPE, SECTION_NUMBER, UNITS, TITLE, TIME, LOCATION,
                 INSTRUCTOR }, null, null, null, null, null);
     }
 
@@ -123,12 +124,12 @@ public class CoursesDBAdapter extends DBAdapter {
      * @return Cursor positioned to matching course, if found
      * @throws SQLException if course could not be found/retrieved
      */
-    public Cursor getCar(long rowId) throws SQLException {
+    public Cursor getCourse(long rowId) throws SQLException {
 
         Cursor mCursor =
 
                 mDb.query(true, DATABASE_TABLE, new String[] { ROW_ID,
-                COURSE_ID, COURSE_NUMBER, COURSE_TYPE, SECTION_NUMBER, TITLE, TIME, LOCATION,
+                COURSE_ID, COURSE_NUMBER, COURSE_TYPE, SECTION_NUMBER, UNITS, TITLE, TIME, LOCATION,
                 INSTRUCTOR }, ROW_ID + "=" + rowId, null, null, null, null, null);
         if (mCursor != null) {
             mCursor.moveToFirst();
@@ -142,13 +143,14 @@ public class CoursesDBAdapter extends DBAdapter {
      * @return true if the note was successfully updated, false otherwise
      */
     public boolean updateCourse(long rowId, String course_id, String course_number, String course_type,
-                             String section_number, String title, String time, String location,
-                             String instructor) {
+                             String section_number, String units, String title, String time,
+                             String location, String instructor) {
         ContentValues args = new ContentValues();
         args.put(COURSE_ID, course_id);
         args.put(COURSE_NUMBER, course_number);
         args.put(COURSE_TYPE, course_type);
         args.put(SECTION_NUMBER, section_number);
+        args.put(UNITS, units);
         args.put(TITLE, title);
         args.put(TIME, time);
         args.put(LOCATION, location);
