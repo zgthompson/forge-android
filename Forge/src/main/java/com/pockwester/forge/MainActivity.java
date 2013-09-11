@@ -22,7 +22,7 @@ public class MainActivity extends Activity {
             if (bundle != null) {
                 int resultCode = bundle.getInt(DBSyncService.RESULT);
                 if (resultCode == RESULT_OK) {
-                    Toast.makeText(MainActivity.this, "DB Synced!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(MainActivity.this, "DB synced!", Toast.LENGTH_LONG).show();
                 }
             }
         }
