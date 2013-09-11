@@ -36,8 +36,7 @@ public class MainActivity extends Activity {
         // create database tables
         new DBAdapter(this).open().close();
 
-       //startService(new Intent(this, DBSyncService.class));
-        //test TEST!
+		//startService(new Intent(this, DBSyncService.class));
 
     }
 
