@@ -37,6 +37,7 @@ public class MainActivity extends Activity {
         new DBAdapter(this).open().close();
 
        //startService(new Intent(this, DBSyncService.class));
+        //test
 
     }
 
