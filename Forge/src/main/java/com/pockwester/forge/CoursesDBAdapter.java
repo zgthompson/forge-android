@@ -79,19 +79,17 @@ public class CoursesDBAdapter {
      *
      * @return rowId or -1 if failed
      */
-    public long createCourse(String course_id, String course_number, String course_type,
-                             String section_number, String units, String title, String time,
-                             String location, String instructor) {
+    public long createCourse(Course course) {
         ContentValues initialValues = new ContentValues();
-        initialValues.put(COURSE_ID, course_id);
-        initialValues.put(COURSE_NUMBER, course_number);
-        initialValues.put(COURSE_TYPE, course_type);
-        initialValues.put(SECTION_NUMBER, section_number);
-        initialValues.put(UNITS, units);
-        initialValues.put(TITLE, title);
-        initialValues.put(TIME, time);
-        initialValues.put(LOCATION, location);
-        initialValues.put(INSTRUCTOR, instructor);
+        initialValues.put(COURSE_ID, course.course_id);
+        initialValues.put(COURSE_NUMBER, course.course_number);
+        initialValues.put(COURSE_TYPE, course.course_type);
+        initialValues.put(SECTION_NUMBER, course.section_number);
+        initialValues.put(UNITS, course.units);
+        initialValues.put(TITLE, course.title);
+        initialValues.put(TIME, course.time);
+        initialValues.put(LOCATION, course.location);
+        initialValues.put(INSTRUCTOR, course.instructor);
         return mDb.insert(DATABASE_TABLE, null, initialValues);
     }
 

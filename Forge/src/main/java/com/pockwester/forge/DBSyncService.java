@@ -14,6 +14,7 @@ import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -40,23 +41,19 @@ public class DBSyncService extends IntentService {
     protected void onHandleIntent(Intent intent) {
 
         String response;
-        List<List<String>> dbList= null;
+        JSONArray coursesArray= null;
 
 
-        response = postToServer(new BasicNameValuePair("apitask", "get_classes"));
+        response = postToServer(new BasicNameValuePair("apitask", "get_courses"));
 
         // make sure response was successful and covert to json
         if (response != null) {
-            dbList = convertToList(response);
+            coursesArray = convertToArray(response);
         }
 
         // make sure conversion was successful and update db
-        if (dbList != null) {
-            CoursesDBAdapter db = new CoursesDBAdapter(this).open();
-            for (List<String> rowList :dbList) {
-                addCourseToDB(db, rowList);
-            }
-            db.close();
+        if (coursesArray != null) {
+            addCoursesToDB(coursesArray);
         }
 
         Intent resultIntent = new Intent(NOTIFICATION);
@@ -86,40 +83,28 @@ public class DBSyncService extends IntentService {
         }
     }
 
-    private List<List<String>> convertToList(String response) {
+    private JSONArray convertToArray(String response) {
 
         try {
-
-            List<List<String>> dbList = new ArrayList<List<String>>();
-            JSONArray dbArray = new JSONArray(response);
-            int db_len = dbArray.length();
-            // iterate over every row in db
-            for (int i = 0; i < db_len; i++) {
-
-                List<String> rowList = new ArrayList<String>();
-                JSONArray rowArray = (JSONArray) dbArray.get(i);
-                int row_len = rowArray.length();
-                // iterate over every item in a row
-                for (int j = 0; j < row_len; j++) {
-                    rowList.add(rowArray.getString(j));
-                }
-                dbList.add(rowList);
-            }
-            return dbList;
+            JSONObject coursesObject = new JSONObject(response);
+            return coursesObject.getJSONArray("courses");
         } catch (JSONException e) {
             Log.e("forge", "JSONException in DBSyncService.convertToList", e);
             return null;
         }
-
     }
 
-    private void addCourseToDB(CoursesDBAdapter db, List<String> rowList) {
-        // this is very ugly, need to reformat JSON response from server to be more descriptive
-        long id = db.createCourse(rowList.get(0), rowList.get(1) + rowList.get(2), rowList.get(6), rowList.get(3),
-                rowList.get(5), rowList.get(4), rowList.get(7) + " " + rowList.get(8), rowList.get(9),
-                rowList.get(10));
-        Log.d("forge", "_id: " + id);
-
+    private void addCoursesToDB(JSONArray coursesArray) {
+        CoursesDBAdapter db = new CoursesDBAdapter(this).open();
+            for (int i = 0; i < coursesArray.length(); i++) {
+                try {
+                    long id = db.createCourse(new Course(coursesArray.getJSONObject(i)));
+                    Log.d("forge", "id:"+id);
+                } catch (JSONException e) {
+                    Log.e("forge", "JSONException in DBSyncService.onHandleIntent", e);
+                }
+            }
+            db.close();
     }
 
 }
