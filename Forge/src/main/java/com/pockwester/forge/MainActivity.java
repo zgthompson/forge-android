@@ -6,12 +6,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.app.Activity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Toast;
-
-import java.io.File;
 
 public class MainActivity extends Activity {
 
@@ -33,9 +30,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // create database tables
-        new DBAdapter(this).open().close();
-
+        // Uncomment startService to populate database for the first time and then recomment
 		//startService(new Intent(this, DBSyncService.class));
 
     }
@@ -60,7 +55,7 @@ public class MainActivity extends Activity {
     }
 
     public void openClassIndex(View v) {
-        Intent intent = new Intent(this, ClassIndexActivity.class);
+        Intent intent = new Intent(this, CourseIndexActivity.class);
         startActivity(intent);
     }
     

@@ -2,7 +2,10 @@ package com.pockwester.forge;
 
 import android.app.Activity;
 import android.app.IntentService;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.net.Uri;
 import android.net.http.AndroidHttpClient;
 import android.util.Log;
 
@@ -28,6 +31,8 @@ public class DBSyncService extends IntentService {
 
     public static final String NOTIFICATION = "com.pockwester.forge.db_sync";
     public static final String RESULT = "result";
+    static final String API_ROOT = "http://arthurwut.com/pockwester/api/";
+    static final String API_KEY = "test";
 
     /**
      * Creates an IntentService.  Invoked by your subclass's constructor.
@@ -53,7 +58,7 @@ public class DBSyncService extends IntentService {
 
         // make sure conversion was successful and update db
         if (coursesArray != null) {
-            addCoursesToDB(coursesArray);
+            addNewCourses(coursesArray);
         }
 
         Intent resultIntent = new Intent(NOTIFICATION);
@@ -65,11 +70,11 @@ public class DBSyncService extends IntentService {
 
         AndroidHttpClient client = AndroidHttpClient.newInstance("Android");
         List<NameValuePair> paramsList = new ArrayList<NameValuePair>(Arrays.asList(params));
-        paramsList.add(new BasicNameValuePair("apikey", Constants.API_KEY));
+        paramsList.add(new BasicNameValuePair("apikey", API_KEY));
 
         try {
             // set url
-            HttpPost httpPost = new HttpPost(Constants.API_ROOT);
+            HttpPost httpPost = new HttpPost(API_ROOT);
             // set params
             httpPost.setEntity(new UrlEncodedFormEntity(paramsList));
             // fire away
@@ -94,17 +99,20 @@ public class DBSyncService extends IntentService {
         }
     }
 
-    private void addCoursesToDB(JSONArray coursesArray) {
-        CoursesDBAdapter db = new CoursesDBAdapter(this).open();
-            for (int i = 0; i < coursesArray.length(); i++) {
-                try {
-                    long id = db.createCourse(new Course(coursesArray.getJSONObject(i)));
-                    Log.d("forge", "id:"+id);
-                } catch (JSONException e) {
-                    Log.e("forge", "JSONException in DBSyncService.onHandleIntent", e);
+    private void addNewCourses(JSONArray coursesArray) {
+        ContentResolver cr = getContentResolver();
+        ContentValues curValues;
+
+        for (int i = 0; i < coursesArray.length(); i++) {
+            try {
+                curValues = Course.jsonToContentValues(coursesArray.getJSONObject(i));
+                if (curValues != null) {
+                    cr.insert(ForgeProvider.COURSE_CONTENT_URI, curValues);
                 }
+            } catch (JSONException e) {
+                Log.e("forge", "JSONException in DBSyncService.onHandleIntent", e);
             }
-            db.close();
+        }
     }
 
 }

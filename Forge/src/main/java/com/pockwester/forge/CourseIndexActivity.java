@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
 
-public class ClassIndexActivity extends Activity {
+public class CourseIndexActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,7 +23,7 @@ public class ClassIndexActivity extends Activity {
     }
 
     public void openAddClass(View v) {
-        Intent intent = new Intent(this, SearchClassActivity.class);
+        Intent intent = new Intent(this, SearchCourseActivity.class);
         startActivity(intent);
     }
 }

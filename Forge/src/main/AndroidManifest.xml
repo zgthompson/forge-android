@@ -17,7 +17,7 @@
         android:theme="@style/AppTheme" >
         <meta-data
             android:name="android.app.default_searchable"
-            android:value=".ClassSearchActivity" />
+            android:value=".SearchCourseActivity" />
         <activity
             android:name="com.pockwester.forge.MainActivity"
             android:label="@string/app_name" >
@@ -28,31 +28,30 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.pockwester.forge.ClassIndexActivity"
+            android:name=".CourseIndexActivity"
             android:label="@string/title_activity_class_index" >
         </activity>
         <activity
-            android:name="com.pockwester.forge.AddClassActivity"
-            android:label="@string/title_activity_add_class" >
-        </activity>
-        <activity
-            android:name="com.pockwester.forge.SearchClassActivity"
+            android:name=".SearchCourseActivity"
             android:launchMode="singleTop"
-            android:label="@string/title_activity_search_class" >
+            android:label="Course Search">
             <intent-filter >
                 <action android:name="android.intent.action.SEARCH" />
-            </intent-filter>
-            <intent-filter >
-                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
 
+        <provider
+            android:authorities="com.pockwester.forge.provider"
+            android:name=".ForgeProvider" />
+
         <service
             android:name=".DBSyncService"
-            android:label="DBSyncService" />
+            android:label="DBSyncService">
+        </service>
     </application>
 
 </manifest>
