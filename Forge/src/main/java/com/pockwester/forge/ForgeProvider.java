@@ -31,29 +31,12 @@ public class ForgeProvider extends ContentProvider {
 
     private static final int COURSES = 1;
     private static final int COURSE_ID = 2;
-    private static final int SEARCH = 3;
 
     public static final Uri COURSE_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + COURSE_PATH);
 
     static {
         uriMatcher.addURI(AUTHORITY, COURSE_PATH, COURSES);
         uriMatcher.addURI(AUTHORITY, COURSE_PATH + "/#", COURSE_ID);
-        uriMatcher.addURI(AUTHORITY, SearchManager.SUGGEST_URI_PATH_QUERY, SEARCH);
-        uriMatcher.addURI(AUTHORITY, SearchManager.SUGGEST_URI_PATH_QUERY + "/*", SEARCH);
-        uriMatcher.addURI(AUTHORITY, SearchManager.SUGGEST_URI_PATH_SHORTCUT, SEARCH);
-        uriMatcher.addURI(AUTHORITY, SearchManager.SUGGEST_URI_PATH_SHORTCUT + "/*", SEARCH);
-    }
-
-    private static final HashMap<String, String> SEARCH_SUGGEST_PROJECTION_MAP;
-    static {
-        SEARCH_SUGGEST_PROJECTION_MAP = new HashMap<String, String>();
-        SEARCH_SUGGEST_PROJECTION_MAP.put("_id", Course.ROW_ID + " AS " + "_id");
-        SEARCH_SUGGEST_PROJECTION_MAP.put(SearchManager.SUGGEST_COLUMN_TEXT_1,
-                Course.ROW_COURSE_NUMBER + " AS " + SearchManager.SUGGEST_COLUMN_TEXT_1);
-        //SEARCH_SUGGEST_PROJECTION_MAP.put(SearchManager.SUGGEST_COLUMN_TEXT_2,
-        //        Course.ROW_TITLE + " AS " + SearchManager.SUGGEST_COLUMN_TEXT_2);
-        //SEARCH_SUGGEST_PROJECTION_MAP.put(SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID,
-       //         Course.ROW_ID + " AS " + "_id");
     }
 
     @Override
@@ -81,22 +64,13 @@ public class ForgeProvider extends ContentProvider {
             case COURSE_ID:
                 queryBuilder.appendWhere(Course.ROW_ID + "=" + uri.getLastPathSegment());
                 break;
-            case SEARCH:
-                String query = uri.getLastPathSegment();
-                //queryBuilder.appendWhere(Course.ROW_COURSE_ID + " LIKE \"%" + query + "%\"");
-                selection = Course.ROW_COURSE_NUMBER + " LIKE \"%" + query + "%\"";
-                queryBuilder.setProjectionMap(SEARCH_SUGGEST_PROJECTION_MAP);
-                break;
             default:
                 Log.e("forge", uri.toString());
                 throw new IllegalArgumentException("Unknown URI");
         }
 
-        Log.d("forge", "selection: " + selection);
         Cursor cursor = queryBuilder.query(db, projection, selection, selectionArgs, groupBy,
                 having, sortOrder);
-
-        Log.d("forge", "count: " + cursor.getCount());
 
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
 
@@ -111,8 +85,6 @@ public class ForgeProvider extends ContentProvider {
                 return "vnd.android.cursor.dir/vnd.pockwester.course";
             case COURSE_ID:
                 return "vnd.android.cursor.item/vnd.pockwester.course";
-            case SEARCH:
-                return SearchManager.SUGGEST_MIME_TYPE;
             default:
                 throw new IllegalArgumentException("Unsupported URI" + uri);
         }
