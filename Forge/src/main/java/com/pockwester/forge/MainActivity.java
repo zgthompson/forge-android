@@ -1,9 +1,11 @@
 package com.pockwester.forge;
 
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
@@ -12,6 +14,8 @@ import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
+    private ProgressDialog progressDialog;
+
     private BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -19,7 +23,7 @@ public class MainActivity extends Activity {
             if (bundle != null) {
                 int resultCode = bundle.getInt(DBSyncService.RESULT);
                 if (resultCode == RESULT_OK) {
-                    Toast.makeText(MainActivity.this, "DB synced!", Toast.LENGTH_LONG).show();
+                    progressDialog.dismiss();
                 }
             }
         }
@@ -30,9 +34,12 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Uncomment startService to populate database for the first time and then recomment
-		//startService(new Intent(this, DBSyncService.class));
-
+        // updates database
+		startService(new Intent(this, DBSyncService.class));
+        // creates loading spinner
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Syncing database");
+        progressDialog.show();
     }
 
     @Override

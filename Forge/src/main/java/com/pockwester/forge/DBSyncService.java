@@ -4,7 +4,10 @@ import android.app.Activity;
 import android.app.IntentService;
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.net.Uri;
 import android.net.http.AndroidHttpClient;
 import android.util.Log;
@@ -44,12 +47,18 @@ public class DBSyncService extends IntentService {
     // Will be called aysnchronously
     @Override
     protected void onHandleIntent(Intent intent) {
+        Log.d("forge", "db sync start");
 
         String response;
         JSONArray coursesArray= null;
+        SharedPreferences prefs = getSharedPreferences("com.pockwester.forge", Context.MODE_PRIVATE);
 
+        String last_updated = prefs.getString("last_update", "0");
 
-        response = postToServer(new BasicNameValuePair("apitask", "get_courses"));
+        String timeOfRequest = "" + (System.currentTimeMillis() / 1000L);
+        response = postToServer(new BasicNameValuePair("apitask", "get_courses"),
+                new BasicNameValuePair("last_update", last_updated));
+
 
         // make sure response was successful and covert to json
         if (response != null) {
@@ -61,9 +70,17 @@ public class DBSyncService extends IntentService {
             addNewCourses(coursesArray);
         }
 
+        // set last_update to time of request
+        prefs.edit().putString("last_update", timeOfRequest).commit();
+
+        // create notification intent
         Intent resultIntent = new Intent(NOTIFICATION);
         resultIntent.putExtra(RESULT, Activity.RESULT_OK);
+
+        // notify MainActivity of completion
         sendBroadcast(resultIntent);
+
+        Log.d("forge", "db sync complete");
     }
 
     private String postToServer(NameValuePair... params) {
@@ -107,12 +124,36 @@ public class DBSyncService extends IntentService {
             try {
                 curValues = Course.jsonToContentValues(coursesArray.getJSONObject(i));
                 if (curValues != null) {
-                    cr.insert(ForgeProvider.COURSE_CONTENT_URI, curValues);
+                    String row_id = getRowId(curValues.getAsString(Course.ROW_COURSE_ID));
+                    // update item in database
+                    if (row_id != null) {
+                        cr.update(Uri.withAppendedPath(ForgeProvider.COURSE_CONTENT_URI, Uri.encode(row_id)),
+                                curValues, null, null);
+                    }
+                    // create new entry in database
+                    else {
+                        cr.insert(ForgeProvider.COURSE_CONTENT_URI, curValues);
+                    }
                 }
             } catch (JSONException e) {
                 Log.e("forge", "JSONException in DBSyncService.onHandleIntent", e);
             }
         }
+    }
+
+    private String getRowId(String courseId) {
+        ContentResolver cr = getContentResolver();
+        Cursor cursor = cr.query(ForgeProvider.COURSE_CONTENT_URI, new String[] { Course.ROW_ID },
+                Course.ROW_COURSE_ID + "=" + courseId, null, null);
+        String row_id;
+        if (cursor.moveToFirst()) {
+            row_id = "" + cursor.getLong(0);
+        }
+        else {
+            row_id = null;
+        }
+        cursor.close();
+        return row_id;
     }
 
 }

@@ -97,6 +97,7 @@ public class ForgeProvider extends ContentProvider {
         if (rowId > 0) {
             Uri outUri = ContentUris.withAppendedId(COURSE_CONTENT_URI, rowId);
             getContext().getContentResolver().notifyChange(outUri, null);
+            Log.d("forge", "inserted: " + rowId);
             return outUri;
         }
         throw new SQLException("Failed to insert row into " + uri);
@@ -139,6 +140,7 @@ public class ForgeProvider extends ContentProvider {
             default: throw new IllegalArgumentException("Unsupported URI: " + uri);
         }
         getContext().getContentResolver().notifyChange(uri, null);
+        Log.d("forge", "updated a row");
         return count;
     }
 
