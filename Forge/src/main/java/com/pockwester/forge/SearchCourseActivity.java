@@ -12,6 +12,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
@@ -19,6 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.Toast;
 
 public class SearchCourseActivity extends ListActivity
         implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -75,9 +77,10 @@ public class SearchCourseActivity extends ListActivity
         return true;
     }
 
-    public void onListItemClick(ListView l,
-                                View v, int position, long id) {
-        // call detail activity for clicked entry
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        Intent detailIntent = new Intent(this, CourseDetailActivity.class);
+        detailIntent.putExtra("id", id);
+        startActivity(detailIntent);
     }
 
     private void updateLoader(String queryStr) {

@@ -23,7 +23,7 @@ public class Course {
     public static final String ROW_LOCATION = "location";
     public static final String ROW_INSTRUCTOR = "instructor";
 
-    public static ContentValues jsonToContentValues(JSONObject courseObject) {
+    public static ContentValues jsonToContentValues(JSONObject courseObject) throws JSONException {
         ContentValues values = new ContentValues();
         try {
             values.put(ROW_COURSE_ID, courseObject.getString("course_id"));
@@ -37,7 +37,7 @@ public class Course {
             values.put(ROW_INSTRUCTOR, courseObject.getString("instructor"));
         } catch (JSONException e) {
             Log.e("forge", "JSONException in Course.jsonToContentValues");
-            return null;
+            throw new JSONException("Improper course object");
         }
         return values;
     }

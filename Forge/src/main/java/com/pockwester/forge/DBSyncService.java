@@ -2,13 +2,12 @@ package com.pockwester.forge;
 
 import android.app.Activity;
 import android.app.IntentService;
-import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.net.Uri;
 import android.net.http.AndroidHttpClient;
 import android.util.Log;
 
@@ -47,31 +46,36 @@ public class DBSyncService extends IntentService {
     // Will be called aysnchronously
     @Override
     protected void onHandleIntent(Intent intent) {
-        Log.d("forge", "db sync start");
-
-        String response;
         JSONArray coursesArray= null;
-        SharedPreferences prefs = getSharedPreferences("com.pockwester.forge", Context.MODE_PRIVATE);
 
-        String last_updated = prefs.getString("last_update", "0");
-
+        // save time of api request
         String timeOfRequest = "" + (System.currentTimeMillis() / 1000L);
-        response = postToServer(new BasicNameValuePair("apitask", "get_courses"),
-                new BasicNameValuePair("last_update", last_updated));
+
+        // make request to api
+        String response = postToServer(new BasicNameValuePair("apitask", "get_courses"),
+                new BasicNameValuePair("last_update", getLastUpdate()));
 
 
         // make sure response was successful and covert to json
         if (response != null) {
             coursesArray = convertToArray(response);
         }
+        else {
+            Log.e("forge", "api request unsuccessful in DBSyncService");
+            return;
+        }
 
         // make sure conversion was successful and update db
         if (coursesArray != null) {
-            addNewCourses(coursesArray);
+            addOrUpdateCourses(coursesArray);
+        }
+        else {
+            Log.e("forge", "JSON conversion unsuccessful in DBSyncService");
+            return;
         }
 
         // set last_update to time of request
-        prefs.edit().putString("last_update", timeOfRequest).commit();
+        setLastUpdate(timeOfRequest);
 
         // create notification intent
         Intent resultIntent = new Intent(NOTIFICATION);
@@ -79,8 +83,16 @@ public class DBSyncService extends IntentService {
 
         // notify MainActivity of completion
         sendBroadcast(resultIntent);
+    }
 
-        Log.d("forge", "db sync complete");
+    private String getLastUpdate() {
+        SharedPreferences prefs = getSharedPreferences("com.pockwester.forge", Context.MODE_PRIVATE);
+        return prefs.getString("last_update", "0");
+    }
+
+    private void setLastUpdate(String timeOfRequest) {
+        SharedPreferences prefs = getSharedPreferences("com.pockwester.forge", Context.MODE_PRIVATE);
+        prefs.edit().putString("last_update", timeOfRequest).commit();
     }
 
     private String postToServer(NameValuePair... params) {
@@ -116,41 +128,50 @@ public class DBSyncService extends IntentService {
         }
     }
 
-    private void addNewCourses(JSONArray coursesArray) {
-        ContentResolver cr = getContentResolver();
-        ContentValues curValues;
-
+    private void addOrUpdateCourses(JSONArray coursesArray) {
         for (int i = 0; i < coursesArray.length(); i++) {
             try {
-                curValues = Course.jsonToContentValues(coursesArray.getJSONObject(i));
-                if (curValues != null) {
-                    String row_id = getRowId(curValues.getAsString(Course.ROW_COURSE_ID));
-                    // update item in database
-                    if (row_id != null) {
-                        cr.update(Uri.withAppendedPath(ForgeProvider.COURSE_CONTENT_URI, Uri.encode(row_id)),
-                                curValues, null, null);
-                    }
-                    // create new entry in database
-                    else {
-                        cr.insert(ForgeProvider.COURSE_CONTENT_URI, curValues);
-                    }
-                }
-            } catch (JSONException e) {
+                addOrUpdateCourse(Course.jsonToContentValues(coursesArray.getJSONObject(i)));
+            }
+            catch (JSONException e) {
                 Log.e("forge", "JSONException in DBSyncService.onHandleIntent", e);
             }
         }
     }
 
-    private String getRowId(String courseId) {
-        ContentResolver cr = getContentResolver();
-        Cursor cursor = cr.query(ForgeProvider.COURSE_CONTENT_URI, new String[] { Course.ROW_ID },
-                Course.ROW_COURSE_ID + "=" + courseId, null, null);
-        String row_id;
-        if (cursor.moveToFirst()) {
-            row_id = "" + cursor.getLong(0);
+
+    private void addOrUpdateCourse(ContentValues courseValues) {
+        long row_id = getRowId(courseValues.getAsString(Course.ROW_COURSE_ID));
+
+        if (row_id != -1) {
+            updateCourse(courseValues, row_id);
         }
         else {
-            row_id = null;
+            addCourse(courseValues);
+        }
+
+    }
+
+    private void updateCourse(ContentValues courseValues, long id) {
+        getContentResolver().update(ContentUris.withAppendedId(ForgeProvider.COURSE_CONTENT_URI, id),
+                courseValues, null, null);
+    }
+
+    private void addCourse(ContentValues courseValues) {
+        getContentResolver().insert(ForgeProvider.COURSE_CONTENT_URI, courseValues);
+    }
+
+    private long getRowId(String courseId) {
+        Cursor cursor = getContentResolver().query(ForgeProvider.COURSE_CONTENT_URI,
+                new String[] { Course.ROW_ID }, Course.ROW_COURSE_ID + "=" + courseId, null, null);
+
+        long row_id;
+
+        if (cursor.moveToFirst()) {
+            row_id = cursor.getLong(0);
+        }
+        else {
+            row_id = -1;
         }
         cursor.close();
         return row_id;

@@ -25,22 +25,27 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".CourseIndexActivity"
+            android:name="com.pockwester.forge.CourseIndexActivity"
             android:label="@string/title_activity_class_index" >
         </activity>
         <activity
-            android:name=".SearchCourseActivity"
-            android:label="Course Search">
+            android:name="com.pockwester.forge.SearchCourseActivity"
+            android:label="Course Search" >
         </activity>
 
         <provider
-            android:authorities="com.pockwester.forge.provider"
-            android:name=".ForgeProvider" />
+            android:name="com.pockwester.forge.ForgeProvider"
+            android:authorities="com.pockwester.forge.provider" />
 
         <service
-            android:name=".DBSyncService"
-            android:label="DBSyncService">
+            android:name="com.pockwester.forge.DBSyncService"
+            android:label="DBSyncService" >
         </service>
+
+        <activity
+            android:name="com.pockwester.forge.CourseDetailActivity"
+            android:label="@string/title_activity_course_detail" >
+        </activity>
     </application>
 
 </manifest>
