@@ -152,15 +152,9 @@ public class ForgeProvider extends ContentProvider {
 
         private static final String CREATE_TABLE_COURSES = "create table " + Course.TABLE_NAME
             + " (" + Course.ROW_ID + " integer primary key autoincrement, "
-            + Course.ROW_COURSE_ID + " TEXT,"
             + Course.ROW_COURSE_NUMBER + " TEXT,"
-            + Course.ROW_COURSE_TYPE + " TEXT,"
-            + Course.ROW_SECTION_NUMBER+ " TEXT,"
             + Course.ROW_UNITS + " TEXT,"
-            + Course.ROW_TITLE + " TEXT,"
-            + Course.ROW_TIME + " TEXT,"
-            + Course.ROW_LOCATION + " TEXT,"
-            + Course.ROW_INSTRUCTOR + " TEXT" + ");";
+            + Course.ROW_TITLE + " TEXT" + ");";
 
         public ForgeDBHelper(Context context, String name,
                                    SQLiteDatabase.CursorFactory factory, int version) {
