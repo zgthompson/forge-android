@@ -11,5 +11,9 @@
     <string name="search_hint">Search class name or #</string>
     <string name="title_activity_search_class">SearchClassActivity</string>
     <string name="title_activity_course_detail">CourseDetailActivity</string>
+    <string name="title_activity_availability">Availablility Activity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="title_activity_availability__fullscreen">Availibility Fullscreen</string>
 
 </resources>

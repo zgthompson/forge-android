@@ -32,6 +32,10 @@
             android:name="com.pockwester.forge.SearchCourseActivity"
             android:label="Course Search" >
         </activity>
+        <activity
+            android:name="com.pockwester.forge.AvailabilityActivity"
+            android:label="availability" >
+        </activity>
 
         <provider
             android:name="com.pockwester.forge.ForgeProvider"
@@ -45,6 +49,10 @@
         <activity
             android:name="com.pockwester.forge.CourseDetailActivity"
             android:label="@string/title_activity_course_detail" >
+        </activity>
+        <activity
+            android:name="com.pockwester.forge.AvailabilityActivity"
+            android:label="@string/title_activity_availability" >
         </activity>
     </application>
 
