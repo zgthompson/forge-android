@@ -46,20 +46,25 @@ public class DBSyncService extends IntentService {
     // Will be called aysnchronously
     @Override
     protected void onHandleIntent(Intent intent) {
-        JSONArray coursesArray= null;
+        JSONArray coursesArray = null;
+        JSONArray sectionsArray = null;
 
         // save time of api request
         String timeOfRequest = "" + (System.currentTimeMillis() / 1000L);
 
         // make request to api
-        String response = postToServer(new BasicNameValuePair("apitask", "get_courses"),
+        String courseResponse = postToServer(new BasicNameValuePair("apitask", "get_courses"),
                 new BasicNameValuePair("last_update", getLastUpdate()),
                 new BasicNameValuePair("beta", "true"));
 
+       String sectionResponse = postToServer(new BasicNameValuePair("apitask", "get_sections"),
+                new BasicNameValuePair("last_update", getLastUpdate()));
+
 
         // make sure response was successful and covert to json
-        if (response != null) {
-            coursesArray = convertToArray(response);
+        if (courseResponse != null && sectionResponse != null) {
+            coursesArray = convertToArray(courseResponse, Course.TYPE);
+            sectionsArray = convertToArray(sectionResponse, Section.TYPE);
         }
         else {
             Log.e("forge", "api request unsuccessful in DBSyncService");
@@ -69,6 +74,7 @@ public class DBSyncService extends IntentService {
         // make sure conversion was successful and update db
         if (coursesArray != null) {
             addOrUpdateCourses(coursesArray);
+            addOrUpdateSections(sectionsArray);
         }
         else {
             Log.e("forge", "JSON conversion unsuccessful in DBSyncService");
@@ -118,31 +124,43 @@ public class DBSyncService extends IntentService {
         }
     }
 
-    private JSONArray convertToArray(String response) {
+    private JSONArray convertToArray(String response, int type) {
+        JSONArray jsonArray = null;
 
         try {
-            JSONObject coursesObject = new JSONObject(response);
-            return coursesObject.getJSONArray("courses");
+            JSONObject jsonObject = new JSONObject(response);
+
+            switch (type) {
+                case Course.TYPE:
+                    jsonArray = jsonObject.getJSONArray("courses");
+                    break;
+                case Section.TYPE:
+                    jsonArray = jsonObject.getJSONArray("sections");
+                    break;
+                default:
+                    break;
+            }
         } catch (JSONException e) {
             Log.e("forge", "JSONException in DBSyncService.convertToArray", e);
             return null;
         }
+        return jsonArray;
     }
 
-    private void addOrUpdateCourses(JSONArray coursesArray) {
-        for (int i = 0; i < coursesArray.length(); i++) {
+    private void addOrUpdateCourses(JSONArray courseArray) {
+        for (int i = 0; i < courseArray.length(); i++) {
             try {
-                addOrUpdateCourse(Course.jsonToContentValues(coursesArray.getJSONObject(i)));
+                addOrUpdateCourse(Course.jsonToContentValues(courseArray.getJSONObject(i)));
             }
             catch (JSONException e) {
-                Log.e("forge", "JSONException in DBSyncService.onHandleIntent", e);
+                Log.e("forge", "JSONException in DBSyncService.addOrUpdateCourses", e);
             }
         }
     }
 
 
     private void addOrUpdateCourse(ContentValues courseValues) {
-        long row_id = getRowId(courseValues.getAsString(Course.ROW_COURSE_NUMBER));
+        long row_id = getCourseRowId(courseValues.getAsString(Course.ROW_COURSE_NUMBER));
 
         if (row_id != -1) {
             updateCourse(courseValues, row_id);
@@ -162,7 +180,7 @@ public class DBSyncService extends IntentService {
         getContentResolver().insert(ForgeProvider.COURSE_CONTENT_URI, courseValues);
     }
 
-    private long getRowId(String courseNum) {
+    private long getCourseRowId(String courseNum) {
         Cursor cursor = getContentResolver().query(ForgeProvider.COURSE_CONTENT_URI,
                 new String[] { Course.ROW_ID }, Course.ROW_COURSE_NUMBER + "=\"" + courseNum + "\"", null, null);
 
@@ -178,4 +196,52 @@ public class DBSyncService extends IntentService {
         return row_id;
     }
 
+    private void addOrUpdateSections(JSONArray sectionArray) {
+        for (int i = 0; i < sectionArray.length(); i++) {
+            try {
+                addOrUpdateSection(Section.jsonToContentValues(sectionArray.getJSONObject(i)));
+            }
+            catch (JSONException e) {
+                Log.e("forge", "JSONException in DBSyncService.addOrUpdateSections", e);
+            }
+        }
+    }
+
+
+    private void addOrUpdateSection(ContentValues sectionValues) {
+        long row_id = getSectionRowId(sectionValues.getAsString(Section.ROW_SECTION_ID));
+
+        if (row_id != -1) {
+            updateSection(sectionValues, row_id);
+        }
+        else {
+            addSection(sectionValues);
+        }
+
+    }
+
+    private void updateSection(ContentValues sectionValues, long id) {
+        getContentResolver().update(ContentUris.withAppendedId(ForgeProvider.SECTION_CONTENT_URI, id),
+                sectionValues, null, null);
+    }
+
+    private void addSection(ContentValues sectionValues) {
+        getContentResolver().insert(ForgeProvider.SECTION_CONTENT_URI, sectionValues);
+    }
+
+    private long getSectionRowId(String sectionId) {
+        Cursor cursor = getContentResolver().query(ForgeProvider.SECTION_CONTENT_URI,
+                new String[] { Section.ROW_ID }, Section.ROW_SECTION_ID + "=\"" + sectionId + "\"", null, null);
+
+        long row_id;
+
+        if (cursor.moveToFirst()) {
+            row_id = cursor.getLong(0);
+        }
+        else {
+            row_id = -1;
+        }
+        cursor.close();
+        return row_id;
+    }
 }

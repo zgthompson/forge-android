@@ -17,6 +17,8 @@ public class Course {
     public static final String ROW_UNITS = "units";
     public static final String ROW_TITLE= "title";
 
+    public static final int TYPE = 0;
+
     public static ContentValues jsonToContentValues(JSONObject courseObject) throws JSONException {
         ContentValues values = new ContentValues();
         try {
