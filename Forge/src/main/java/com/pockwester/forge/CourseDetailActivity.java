@@ -36,8 +36,7 @@ public class CourseDetailActivity extends Activity {
     }
 
     private void populateView(long id) {
-        String[] projection = { Course.ROW_COURSE_NUMBER, Course.ROW_TITLE, Course.ROW_TIME,
-                        Course.ROW_INSTRUCTOR };
+        String[] projection = { Course.ROW_COURSE_NUMBER, Course.ROW_TITLE };
 
         Uri uri = ContentUris.withAppendedId(ForgeProvider.COURSE_CONTENT_URI, id);
 
@@ -46,8 +45,6 @@ public class CourseDetailActivity extends Activity {
 
         ((TextView) findViewById(R.id.course_number)).setText(cursor.getString(0));
         ((TextView) findViewById(R.id.course_title)).setText(cursor.getString(1));
-        ((TextView) findViewById(R.id.course_time)).setText(cursor.getString(2));
-        ((TextView) findViewById(R.id.course_instructor)).setText(cursor.getString(3));
 
         cursor.close();
     }

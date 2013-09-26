@@ -32,9 +32,9 @@ public class SearchCourseActivity extends ListActivity
         super.onCreate(savedInstanceState);
 
         // Create adapter and bind it to list view
-        adapter = new SimpleCursorAdapter(this, R.layout.search_list_item, null,
-                new String[] { Course.ROW_COURSE_NUMBER, Course.ROW_SECTION_NUMBER, Course.ROW_TITLE },
-                new int[] {R.id.course_number, R.id.section_number, R.id.course_title}, 0);
+        adapter = new SimpleCursorAdapter(this, android.R.layout.simple_list_item_2, null,
+                new String[] { Course.ROW_COURSE_NUMBER, Course.ROW_TITLE },
+                new int[] {android.R.id.text1, android.R.id.text2} , 0);
 
         setListAdapter(adapter);
 
@@ -99,8 +99,7 @@ public class SearchCourseActivity extends ListActivity
             query = args.getString(QUERY);
         }
         // Construct new query
-        String[] projection = { Course.ROW_ID, Course.ROW_COURSE_NUMBER, Course.ROW_SECTION_NUMBER,
-                Course.ROW_TITLE };
+        String[] projection = { Course.ROW_ID, Course.ROW_COURSE_NUMBER, Course.ROW_TITLE };
 
         String where = Course.ROW_COURSE_NUMBER + " LIKE \"%" + query + "%\" OR " +
                 Course.ROW_TITLE + " LIKE \"%" + query + "%\"";
