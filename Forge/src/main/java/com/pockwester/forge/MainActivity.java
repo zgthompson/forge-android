@@ -65,5 +65,10 @@ public class MainActivity extends Activity {
         Intent intent = new Intent(this, CourseIndexActivity.class);
         startActivity(intent);
     }
+
+    public void openAvailability(View v) {
+        Intent intent = new Intent(this, AvailabilityActivity.class);
+        startActivity(intent);
+    }
     
 }
