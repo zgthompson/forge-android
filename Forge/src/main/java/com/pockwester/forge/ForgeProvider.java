@@ -28,15 +28,21 @@ public class ForgeProvider extends ContentProvider {
 
     private static final String AUTHORITY = "com.pockwester.forge.provider";
     private static final String COURSE_PATH = "courses";
+    private static final String SECTION_PATH = "sections";
 
     private static final int COURSES = 1;
     private static final int COURSE_ID = 2;
+    private static final int SECTIONS = 3;
+    private static final int SECTION_ID = 4;
 
     public static final Uri COURSE_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + COURSE_PATH);
+    public static final Uri SECTION_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + SECTION_PATH);
 
     static {
         uriMatcher.addURI(AUTHORITY, COURSE_PATH, COURSES);
         uriMatcher.addURI(AUTHORITY, COURSE_PATH + "/#", COURSE_ID);
+        uriMatcher.addURI(AUTHORITY, SECTION_PATH, SECTIONS);
+        uriMatcher.addURI(AUTHORITY, SECTION_PATH + "/#", SECTION_ID);
     }
 
     @Override
@@ -55,15 +61,22 @@ public class ForgeProvider extends ContentProvider {
         String having = null;
 
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
-        queryBuilder.setTables(Course.TABLE_NAME);
 
         switch (uriMatcher.match(uri)) {
 
             case COURSES:
+                queryBuilder.setTables(Course.TABLE_NAME);
                 break;
             case COURSE_ID:
+                queryBuilder.setTables(Course.TABLE_NAME);
                 queryBuilder.appendWhere(Course.ROW_ID + "=" + uri.getLastPathSegment());
                 break;
+            case SECTIONS:
+                queryBuilder.setTables(Section.TABLE_NAME);
+                break;
+            case SECTION_ID:
+                queryBuilder.setTables(Section.TABLE_NAME);
+                queryBuilder.appendWhere(Section.ROW_ID + "=" + uri.getLastPathSegment());
             default:
                 Log.e("forge", uri.toString());
                 throw new IllegalArgumentException("Unknown URI");
@@ -85,6 +98,10 @@ public class ForgeProvider extends ContentProvider {
                 return "vnd.android.cursor.dir/vnd.pockwester.course";
             case COURSE_ID:
                 return "vnd.android.cursor.item/vnd.pockwester.course";
+            case SECTIONS:
+                return "vnd.android.cursor.dir/vnd.pockwester.section";
+            case SECTION_ID:
+                return "vnd.android.cursor.item/vnd.pockwester.section";
             default:
                 throw new IllegalArgumentException("Unsupported URI" + uri);
         }
@@ -93,19 +110,39 @@ public class ForgeProvider extends ContentProvider {
     @Override
     public Uri insert(Uri uri, ContentValues values) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        long rowId = db.insert(Course.TABLE_NAME, Course.ROW_UNITS, values);
-        if (rowId > 0) {
-            Uri outUri = ContentUris.withAppendedId(COURSE_CONTENT_URI, rowId);
+        long rowId = 0;
+        Uri outUri = null;
+
+        switch (uriMatcher.match(uri)) {
+            case COURSES:
+                rowId = db.insert(Course.TABLE_NAME, Course.ROW_UNITS, values);
+                if (rowId > 0) {
+                    outUri = ContentUris.withAppendedId(COURSE_CONTENT_URI, rowId);
+                }
+                break;
+            case SECTIONS:
+                rowId = db.insert(Section.TABLE_NAME, Section.ROW_TYPE, values);
+                Log.d("forge", "section: " + rowId);
+                if (rowId > 0) {
+                    outUri = ContentUris.withAppendedId(SECTION_CONTENT_URI, rowId);
+                }
+                break;
+            default:
+                throw new IllegalArgumentException("Unsupported URI" + uri);
+        }
+
+        if (outUri != null) {
             getContext().getContentResolver().notifyChange(outUri, null);
-            Log.d("forge", "inserted: " + rowId);
             return outUri;
         }
+
         throw new SQLException("Failed to insert row into " + uri);
     }
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
+        String newSelection;
         int count;
 
         switch(uriMatcher.match(uri)) {
@@ -113,9 +150,17 @@ public class ForgeProvider extends ContentProvider {
                 count = db.delete(Course.TABLE_NAME, selection, selectionArgs);
                 break;
             case COURSE_ID:
-                String newSelection = Course.ROW_ID + "=" + uri.getLastPathSegment() +
+                newSelection = Course.ROW_ID + "=" + uri.getLastPathSegment() +
                         (!TextUtils.isEmpty(selection) ? " AND (" + selection + ")" : "");
                 count = db.delete(Course.TABLE_NAME, newSelection, selectionArgs);
+                break;
+            case SECTIONS:
+                count = db.delete(Section.TABLE_NAME, selection, selectionArgs);
+                break;
+            case SECTION_ID:
+                newSelection = Section.ROW_ID + "=" + uri.getLastPathSegment() +
+                        (!TextUtils.isEmpty(selection) ? " AND (" + selection + ")" : "");
+                count = db.delete(Section.TABLE_NAME, newSelection, selectionArgs);
                 break;
             default: throw new IllegalArgumentException("Unsupported URI: " + uri);
         }
@@ -126,6 +171,7 @@ public class ForgeProvider extends ContentProvider {
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
+        String newSelection;
         int count;
 
         switch(uriMatcher.match(uri)) {
@@ -133,9 +179,17 @@ public class ForgeProvider extends ContentProvider {
                 count = db.update(Course.TABLE_NAME, values, selection, selectionArgs);
                 break;
             case COURSE_ID:
-                String newSelection = Course.ROW_ID + "=" + uri.getLastPathSegment() +
+                newSelection = Course.ROW_ID + "=" + uri.getLastPathSegment() +
                         (!TextUtils.isEmpty(selection) ? " AND (" + selection + ")" : "");
                 count = db.update(Course.TABLE_NAME, values, newSelection, selectionArgs);
+                break;
+            case SECTIONS:
+                count = db.update(Section.TABLE_NAME, values, selection, selectionArgs);
+                break;
+            case SECTION_ID:
+                newSelection = Section.ROW_ID + "=" + uri.getLastPathSegment() +
+                        (!TextUtils.isEmpty(selection) ? " AND (" + selection + ")" : "");
+                count = db.update(Section.TABLE_NAME, values, newSelection, selectionArgs);
                 break;
             default: throw new IllegalArgumentException("Unsupported URI: " + uri);
         }
@@ -151,10 +205,20 @@ public class ForgeProvider extends ContentProvider {
         private static final int DATABASE_VERSION = 1;
 
         private static final String CREATE_TABLE_COURSES = "create table " + Course.TABLE_NAME
-            + " (" + Course.ROW_ID + " integer primary key autoincrement, "
-            + Course.ROW_COURSE_NUMBER + " TEXT,"
-            + Course.ROW_UNITS + " TEXT,"
-            + Course.ROW_TITLE + " TEXT" + ");";
+                + " (" + Course.ROW_ID + " integer primary key autoincrement, "
+                + Course.ROW_COURSE_NUMBER + " TEXT,"
+                + Course.ROW_UNITS + " TEXT,"
+                + Course.ROW_TITLE + " TEXT" + ");";
+
+        private static final String CREATE_TABLE_SECTIONS = "create table " + Section.TABLE_NAME
+                + " (" + Section.ROW_ID + " integer primary key autoincrement, "
+                + Section.ROW_SECTION_ID + " TEXT,"
+                + Section.ROW_SECTION_NUM + " TEXT,"
+                + Section.ROW_COURSE_ID + " TEXT,"
+                + Section.ROW_BUILDING + " TEXT,"
+                + Section.ROW_INSTRUCTOR + " TEXT,"
+                + Section.ROW_TIME + " TEXT,"
+                + Section.ROW_TYPE + " TEXT" + ");";
 
         public ForgeDBHelper(Context context, String name,
                                    SQLiteDatabase.CursorFactory factory, int version) {
@@ -164,11 +228,13 @@ public class ForgeProvider extends ContentProvider {
         @Override
         public void onCreate(SQLiteDatabase db) {
             db.execSQL(CREATE_TABLE_COURSES);
+            db.execSQL(CREATE_TABLE_SECTIONS);
         }
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             db.execSQL("DROP TABLE IF EXISTS " + Course.TABLE_NAME);
+            db.execSQL("DROP TABLE IF EXISTS " + Section.TABLE_NAME);
             onCreate(db);
         }
     }
