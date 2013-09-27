@@ -50,10 +50,6 @@
             android:name="com.pockwester.forge.CourseDetailActivity"
             android:label="@string/title_activity_course_detail" >
         </activity>
-        <activity
-            android:name="com.pockwester.forge.AvailabilityActivity"
-            android:label="@string/title_activity_availability" >
-        </activity>
     </application>
 
 </manifest>

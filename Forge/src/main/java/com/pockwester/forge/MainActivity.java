@@ -66,9 +66,9 @@ public class MainActivity extends Activity {
         startActivity(intent);
     }
 
-    /*public void openAvailability(View v) {
+    public void openAvailability(View v) {
         Intent intent = new Intent(this, AvailabilityActivity.class);
         startActivity(intent);
-    }*/
+    }
     
 }
