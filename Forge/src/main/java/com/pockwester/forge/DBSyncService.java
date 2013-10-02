@@ -33,8 +33,8 @@ public class DBSyncService extends IntentService {
 
     public static final String NOTIFICATION = "com.pockwester.forge.db_sync";
     public static final String RESULT = "result";
-    static final String API_ROOT = "http://arthurwut.com/pockwester/api/";
-    static final String API_KEY = "test";
+    public static final String API_ROOT = "http://arthurwut.com/pockwester/api/";
+    public static final String API_KEY = "test";
 
     /**
      * Creates an IntentService.  Invoked by your subclass's constructor.

@@ -11,5 +11,6 @@
     <string name="search_hint">Search class name or #</string>
     <string name="title_activity_search_class">SearchClassActivity</string>
     <string name="title_activity_course_detail">CourseDetailActivity</string>
+    <string name="user_prefs_file_name">USER_PREFS</string>
 
 </resources>

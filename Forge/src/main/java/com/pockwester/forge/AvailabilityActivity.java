@@ -11,11 +11,16 @@ import android.widget.TextView;
 
 /**
  * Created by AW on 10/1/13.
+ * Window that shows the availability of the user. This requires that the
+ * user be authenticated through the PWApi services.
  */
 public class AvailabilityActivity extends Activity {
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.availability);
     }
 
 
