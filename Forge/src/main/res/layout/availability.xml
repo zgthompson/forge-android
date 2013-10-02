@@ -139,29 +139,6 @@
 
             <TableRow
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="9 AM"
-                    android:id="@+id/textView2"
-                    android:gravity="center_vertical" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/imageView"
-                    android:background="@drawable/abc_cab_background_bottom_holo_dark"
-                    android:layout_toLeftOf="@+id/scrollView"
-                    android:baselineAlignBottom="false"
-                    android:minHeight="50dp" />
-
-            </TableRow>
-
-            <TableRow
-                android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:id="@+id/tableRow2"
                 android:layout_centerVertical="true"
@@ -184,6 +161,30 @@
                     android:layout_toLeftOf="@+id/scrollView"
                     android:baselineAlignBottom="false"
                     android:minHeight="50dp" />
+
+                <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_column="7">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:text="9 AM"
+                        android:id="@+id/textView2"
+                        android:gravity="center_vertical" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/imageView"
+                        android:background="@drawable/abc_cab_background_bottom_holo_dark"
+                        android:layout_toLeftOf="@+id/scrollView"
+                        android:baselineAlignBottom="false"
+                        android:minHeight="50dp" />
+
+                </TableRow>
             </TableRow>
 
             <TableRow
