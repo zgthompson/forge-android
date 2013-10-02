@@ -1,8 +1,13 @@
 package com.pockwester.forge;
 
+import android.graphics.Point;
 import android.os.Bundle;
 import android.app.Activity;
+import android.view.Display;
 import android.view.Menu;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 public class AvailabilityActivity extends Activity {
 
@@ -10,6 +15,8 @@ public class AvailabilityActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.availability);
+
+
     }
 
 
@@ -19,5 +26,7 @@ public class AvailabilityActivity extends Activity {
         getMenuInflater().inflate(R.menu.availability, menu);
         return true;
     }
-    
+
+
+
 }
