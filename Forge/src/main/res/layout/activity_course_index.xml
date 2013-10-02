@@ -24,6 +24,9 @@
         android:layout_below="@+id/textView"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
-        android:onClick="openAddClass" />
+        android:onClick="openAddClass"
+        android:textColor="#ff0000"
+        android:textStyle="bold"
+        android:textColorHighlight="#000000" />
 
 </RelativeLayout>
