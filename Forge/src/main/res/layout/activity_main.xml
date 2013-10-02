@@ -38,7 +38,7 @@
         android:layout_above="@+id/button2"
         android:layout_centerHorizontal="true"
         android:textColor="#ff0000"
-        android:background="@drawable/roundshapebutton"/>
+        />
 
     <Button
         android:layout_width="wrap_content"
@@ -50,7 +50,7 @@
         android:layout_gravity="center"
         android:onClick="openAvailability"
         android:textColor="#ff0000"
-        android:background="@drawable/roundshapebutton"
+
         android:layout_above="@+id/button3"
         android:layout_centerHorizontal="true" />
 
@@ -64,7 +64,7 @@
         android:layout_gravity="center|bottom"
         android:layout_marginBottom="26dp"
         android:textColor="#ff0000"
-        android:background="@drawable/roundshapebutton"
+
         android:layout_alignParentBottom="true"
         android:layout_alignLeft="@+id/button2" />
 
