@@ -3,15 +3,23 @@ package com.pockwester.forge;
 import android.app.ListActivity;
 import android.app.LoaderManager;
 import android.content.ContentUris;
+import android.content.Context;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
+import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class CourseDetailActivity extends ListActivity
         implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -51,26 +59,24 @@ public class CourseDetailActivity extends ListActivity
         return true;
     }
 
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+
+        SharedPreferences prefs = getSharedPreferences("com.pockwester.forge", Context.MODE_PRIVATE);
+        Set<String> sections = prefs.getStringSet("sections", new HashSet<String>());
+        sections.add(String.valueOf(id));
+        prefs.edit().putStringSet("sections", sections).commit();
+
+        startActivity(new Intent(this, CourseIndexActivity.class));
+    }
+
     private void populateLoader(long id) {
         // Pass search query to the Cursor Loader
         Bundle args = new Bundle();
         args.putLong(COURSE_ID, id);
        // Restart Cursor Loader to execute new query
         getLoaderManager().initLoader(0, args, this);
-    }
-
-    private void populateView(long id) {
-        String[] projection = { Course.ROW_COURSE_NUMBER, Course.ROW_TITLE };
-
-        Uri uri = ContentUris.withAppendedId(ForgeProvider.COURSE_CONTENT_URI, id);
-
-        Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
-        cursor.moveToFirst();
-
-        ((TextView) findViewById(R.id.course_number)).setText(cursor.getString(0));
-        ((TextView) findViewById(R.id.course_title)).setText(cursor.getString(1));
-
-        cursor.close();
     }
 
     @Override

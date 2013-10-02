@@ -8,9 +8,12 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.app.Activity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Toast;
+
+import java.util.Set;
 
 public class MainActivity extends Activity {
 
