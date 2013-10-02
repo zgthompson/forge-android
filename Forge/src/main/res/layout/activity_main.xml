@@ -32,7 +32,8 @@
         android:layout_column="0"
         android:layout_gravity="center"
         android:layout_above="@+id/button2"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:textColor="#ff0000" />
 
     <Button
         android:layout_width="wrap_content"
