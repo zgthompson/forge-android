@@ -14,60 +14,36 @@
     <ImageButton
         android:layout_width="125dp"
         android:layout_height="150dp"
-        android:text="New Button"
-        android:id="@+id/button"
+        android:id="@+id/forge_button"
         android:src="@drawable/anvil_icon"
-        android:layout_row="0"
-        android:layout_column="1"
         android:layout_gravity="center"
-        android:layout_above="@+id/class_button"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="100dp"
         android:adjustViewBounds="false"
-        android:visibility="visible"/>
+        android:visibility="visible"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:contentDescription="anvil" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Classes"
         android:id="@+id/class_button"
-        android:onClick="openClassIndex"
-        android:layout_row="0"
-        android:layout_column="0"
+        android:onClick="openCourseIndex"
         android:layout_gravity="center"
-        android:layout_above="@+id/button2"
-        android:layout_centerHorizontal="true"
         android:textColor="#ff0000"
-        />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Availability"
-        android:id="@+id/button2"
-        android:layout_row="1"
-        android:layout_column="0"
-        android:layout_gravity="center"
-        android:onClick="openAvailability"
-        android:textColor="#ff0000"
-
-        android:layout_above="@+id/button3"
+        android:layout_below="@id/forge_button"
         android:layout_centerHorizontal="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Button"
-        android:id="@+id/button3"
-        android:layout_row="1"
-        android:layout_column="1"
-        android:layout_gravity="center|bottom"
-        android:layout_marginBottom="26dp"
+        android:text="Availability"
+        android:id="@+id/avail_button"
+        android:layout_gravity="center"
+        android:onClick="openAvailability"
         android:textColor="#ff0000"
-
-        android:layout_alignParentBottom="true"
-        android:layout_alignLeft="@+id/button2" />
-
-
+        android:layout_below="@id/class_button"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

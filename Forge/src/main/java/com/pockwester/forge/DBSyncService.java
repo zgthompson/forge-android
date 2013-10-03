@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.http.AndroidHttpClient;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import org.apache.http.NameValuePair;
@@ -93,12 +94,13 @@ public class DBSyncService extends IntentService {
     }
 
     private String getLastUpdate() {
-        SharedPreferences prefs = getSharedPreferences("com.pockwester.forge", Context.MODE_PRIVATE);
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         return prefs.getString("last_update", "0");
     }
 
     private void setLastUpdate(String timeOfRequest) {
-        SharedPreferences prefs = getSharedPreferences("com.pockwester.forge", Context.MODE_PRIVATE);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         prefs.edit().putString("last_update", timeOfRequest).commit();
     }
 

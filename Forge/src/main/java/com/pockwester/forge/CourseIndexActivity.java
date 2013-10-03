@@ -6,7 +6,10 @@ import android.content.ContentResolver;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.os.Bundle;
 import android.app.Activity;
@@ -40,7 +43,9 @@ public class CourseIndexActivity extends Activity
     @Override
     protected void onResume() {
         super.onResume();
-        getLoaderManager().restartLoader(0, null, this);
+        if (getLoaderManager() != null) {
+            getLoaderManager().restartLoader(0, null, this);
+        }
     }
 
     @Override
@@ -59,7 +64,8 @@ public class CourseIndexActivity extends Activity
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         CursorLoader newLoader = null;
 
-        Set<String> sectionSet = getSharedPreferences("com.pockwester.forge", MODE_PRIVATE).getStringSet("sections", null);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        Set<String> sectionSet = prefs.getStringSet("sections", null);
 
         if (sectionSet != null) {
             String[] sectionProjection = { Section.ROW_ID, Section.ROW_COURSE_ID, Section.ROW_TIME };

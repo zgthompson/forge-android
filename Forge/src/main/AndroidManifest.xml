@@ -26,7 +26,7 @@
         </activity>
         <activity
             android:name="com.pockwester.forge.CourseIndexActivity"
-            android:label="@string/title_activity_class_index" >
+            android:label="@string/title_activity_course_title" >
         </activity>
         <activity
             android:name="com.pockwester.forge.SearchCourseActivity"

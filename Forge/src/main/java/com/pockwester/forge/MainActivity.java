@@ -64,7 +64,7 @@ public class MainActivity extends Activity {
         return true;
     }
 
-    public void openClassIndex(View v) {
+    public void openCourseIndex(View v) {
         Intent intent = new Intent(this, CourseIndexActivity.class);
         startActivity(intent);
     }

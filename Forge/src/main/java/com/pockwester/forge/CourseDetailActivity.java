@@ -11,6 +11,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -63,10 +64,10 @@ public class CourseDetailActivity extends ListActivity
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
 
-        SharedPreferences prefs = getSharedPreferences("com.pockwester.forge", Context.MODE_PRIVATE);
-        Set<String> sections = prefs.getStringSet("sections", new HashSet<String>());
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        Set<String> sections = new HashSet<String>(prefs.getStringSet("sections", new HashSet<String>()));
         sections.add(String.valueOf(id));
-        prefs.edit().putStringSet("sections", sections).commit();
+        prefs.edit().putStringSet("sections", sections).apply();
 
         startActivity(new Intent(this, CourseIndexActivity.class));
     }

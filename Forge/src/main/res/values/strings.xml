@@ -4,16 +4,17 @@
     <string name="app_name">Forge</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
-    <string name="title_activity_class_index">ClassIndexActivity</string>
-    <string name="class_index_temp">This will be a list of classes</string>
-    <string name="title_activity_add_class">AddClassActivity</string>
+    <string name="title_activity_course_title">CourseIndexActivity</string>
+    <string name="course_index_temp">This will be a list of courses</string>
+    <string name="title_activity_add_course">AddCourseActivity</string>
     <string name="search_label">Forge</string>
-    <string name="search_hint">Search class name or #</string>
-    <string name="title_activity_search_class">SearchClassActivity</string>
+    <string name="search_hint">Search course name or #</string>
+    <string name="title_activity_search_course">SearchCourseActivity</string>
     <string name="title_activity_course_detail">CourseDetailActivity</string>
     <string name="title_activity_availability">Availablility Activity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="title_activity_availability__fullscreen">Availibility Fullscreen</string>
+    <string name="title_activity_test">TestActivity</string>
 
 </resources>
