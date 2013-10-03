@@ -16,5 +16,6 @@
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="title_activity_availability__fullscreen">Availibility Fullscreen</string>
     <string name="title_activity_test">TestActivity</string>
+    <string name="user_prefs_file_name">USER_PREFS</string>
 
 </resources>

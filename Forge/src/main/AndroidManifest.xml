@@ -25,6 +25,18 @@
             </intent-filter>
         </activity>
         <activity
+            android:name="com.pockwester.forge.AvailabilityActivity"
+            android:label="Availability Screen">
+        </activity>
+        <activity
+            android:name="com.pockwester.forge.NewUserActivity"
+            android:label="Create New User">
+        </activity>
+        <activity
+            android:name="com.pockwester.forge.LoginActivity"
+            android:label="Login">
+        </activity>
+        <activity
             android:name="com.pockwester.forge.CourseIndexActivity"
             android:label="@string/title_activity_course_title" >
         </activity>
