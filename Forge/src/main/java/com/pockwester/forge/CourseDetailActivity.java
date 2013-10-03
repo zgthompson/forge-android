@@ -33,9 +33,9 @@ public class CourseDetailActivity extends ListActivity
         super.onCreate(savedInstanceState);
 
         // Create adapter and bind it to list view
-        adapter = new SimpleCursorAdapter(this, android.R.layout.simple_list_item_2, null,
+        adapter = new SimpleCursorAdapter(this, R.layout.course_detail_list_item, null,
                 new String[] { Section.ROW_TIME, Section.ROW_BUILDING},
-                new int[] {android.R.id.text1, android.R.id.text2} , 0);
+                new int[] {R.id.text1, R.id.text2} , 0);
 
         setListAdapter(adapter);
 
@@ -71,6 +71,7 @@ public class CourseDetailActivity extends ListActivity
 
         startActivity(new Intent(this, CourseIndexActivity.class));
     }
+
 
     private void populateLoader(long id) {
         // Pass search query to the Cursor Loader

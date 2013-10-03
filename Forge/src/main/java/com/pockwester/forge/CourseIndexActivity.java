@@ -14,9 +14,11 @@ import android.view.View;
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class CourseIndexActivity extends Activity
@@ -29,23 +31,40 @@ public class CourseIndexActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_index);
 
-        adapter = new SimpleCursorAdapter(this, android.R.layout.simple_list_item_2, null,
+        adapter = new SimpleCursorAdapter(this, R.layout.course_index_list_item, null,
                 new String[] { Section.ROW_COURSE_ID, Section.ROW_TIME},
-                new int[] {android.R.id.text1, android.R.id.text2 } , 0);
+                new int[] {R.id.text1, R.id.text2 } , 0);
 
 
         ListView listView = (ListView) findViewById(R.id.section_list);
+
+        listView.setOnItemClickListener(new ListView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(CourseIndexActivity.this);
+                Set<String> sections = new HashSet<String>(prefs.getStringSet("sections", new HashSet<String>()));
+
+                sections.remove(String.valueOf(id));
+
+                if (sections.isEmpty()) {
+                    sections = null;
+                    findViewById(R.id.section_list).setVisibility(View.GONE);
+                }
+
+                prefs.edit().putStringSet("sections", sections).apply();
+
+                getLoaderManager().restartLoader(0, null, CourseIndexActivity.this);
+            }
+        });
         listView.setAdapter(adapter);
 
-        getLoaderManager().initLoader(0, null, this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (getLoaderManager() != null) {
-            getLoaderManager().restartLoader(0, null, this);
-        }
+
+        getLoaderManager().initLoader(0, null, this);
     }
 
     @Override
