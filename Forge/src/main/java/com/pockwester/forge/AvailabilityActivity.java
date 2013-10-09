@@ -1,5 +1,6 @@
 package com.pockwester.forge;
 
+import android.content.Context;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.app.Activity;
@@ -14,7 +15,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Created by AW on 10/1/13.
@@ -28,7 +32,9 @@ public class AvailabilityActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.availability);
     }
-
+    public void ViewButtonAnim(View imgvuw){
+               imgvuw.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
