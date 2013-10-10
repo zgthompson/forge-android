@@ -26,14 +26,44 @@ import android.widget.Toast;
  * user be authenticated through the PWApi services.
  */
 public class AvailabilityActivity extends Activity {
-
+    protected int black;
+    protected int white;
+    protected int blue;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.availability);
+        black =0;
+        blue =0;
+        white = 0;
     }
-    public void ViewButtonAnim(View imgvuw){
-               imgvuw.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
+
+    public void ViewButtonBlack(View imgvuw){
+            if((black % 2) == 0){
+                imgvuw.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
+            }
+            else{ imgvuw.setBackgroundResource(R.drawable.abc_ab_bottom_solid_dark_holo);
+            }
+        black = (black + 1);
+        //findViewById(R.id.imageView16)
+              }
+
+    public void ViewButtonWhite(View imgvuw){
+        if((white % 2) == 0){
+            imgvuw.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
+        }
+        else{ imgvuw.setBackgroundResource(R.drawable.abc_ab_bottom_solid_light_holo);
+        }
+        white = (white + 1);
+    }
+
+    public void ViewButtonBlue(View imgvuw){
+        if((blue % 2) == 0){
+            imgvuw.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
+        }
+        else{ imgvuw.setBackgroundResource(R.drawable.abc_cab_background_top_holo_dark);
+        }
+        blue = (blue + 1);
     }
 
     @Override

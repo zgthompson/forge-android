@@ -101,9 +101,9 @@
         android:gravity="right">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="40dp"
             android:layout_height="wrap_content"
-            android:id="@+id/imageView7"
+            android:id="@+id/imageView4"
             android:background="@drawable/abc_ab_bottom_solid_dark_holo"
             android:minHeight="50dp"
             android:layout_weight="1"
@@ -112,7 +112,7 @@
             android:gravity="center" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:id="@+id/imageView"
             android:background="@drawable/abc_ab_bottom_solid_dark_holo"
@@ -123,7 +123,7 @@
             android:gravity="center" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:id="@+id/imageView2"
             android:background="@drawable/abc_ab_bottom_solid_dark_holo"
@@ -134,7 +134,7 @@
             android:gravity="center" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:id="@+id/imageView3"
             android:background="@drawable/abc_ab_bottom_solid_dark_holo"
@@ -152,7 +152,8 @@
         android:layout_alignParentEnd="false"
         android:layout_alignParentBottom="false"
         android:layout_below="@+id/relativeLayout"
-        android:layout_marginTop="50dp">
+        android:layout_marginTop="50dp"
+        android:divider="@drawable/abc_list_divider_holo_dark">
 
         <ScrollView
             android:layout_width="fill_parent"
@@ -167,12 +168,13 @@
                 <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:weightSum="4">
+                    android:weightSum="4"
+                    android:showDividers="beginning|none|middle|end">
 
                     <TextView
                         android:layout_width="40dp"
                         android:layout_height="wrap_content"
-                        android:id="@+id/imageView8"
+                        android:id="@+id/imageView5"
                         android:background="@drawable/abc_ab_bottom_solid_dark_holo"
                         android:baselineAlignBottom="false"
                         android:layout_weight="1"
@@ -186,34 +188,34 @@
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="wrap_content"
-                        android:id="@+id/imageView4"
+                        android:id="@+id/imageView6"
                         android:background="@drawable/abc_ab_bottom_solid_dark_holo"
                         android:minHeight="50dp"
                         android:focusableInTouchMode="true"
                         android:layout_weight="1"
                         android:clickable="true"
-                        android:onClick="ViewButtonAnim" />
+                        android:onClick="ViewButtonBlack" />
 
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="wrap_content"
-                        android:id="@+id/imageView5"
+                        android:id="@+id/imageView7"
                         android:background="@drawable/abc_ab_bottom_solid_light_holo"
                         android:minHeight="50dp"
                         android:layout_weight="1"
                         android:clickable="true"
-                        android:onClick="ViewButtonAnim" />
+                        android:onClick="ViewButtonWhite" />
 
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="wrap_content"
-                        android:id="@+id/imageView6"
+                        android:id="@+id/imageView8"
                         android:minHeight="50dp"
                         android:background="@drawable/abc_cab_background_top_holo_dark"
                         android:layout_weight="1"
                         android:clickable="true"
                         android:cropToPadding="false"
-                        android:onClick="ViewButtonAnim" />
+                        android:onClick="ViewButtonBlue" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -249,7 +251,7 @@
                             android:focusableInTouchMode="true"
                             android:layout_weight="1"
                             android:clickable="true"
-                            android:onClick="ViewButtonAnim" />
+                            android:onClick="ViewButtonBlack" />
 
                         <ImageView
                             android:layout_width="40dp"
@@ -259,7 +261,7 @@
                             android:minHeight="50dp"
                             android:layout_weight="1"
                             android:clickable="true"
-                            android:onClick="ViewButtonAnim" />
+                            android:onClick="ViewButtonWhite" />
 
                         <ImageView
                             android:layout_width="40dp"
@@ -269,7 +271,7 @@
                             android:background="@drawable/abc_cab_background_top_holo_dark"
                             android:layout_weight="1"
                             android:clickable="true"
-                            android:onClick="ViewButtonAnim" />
+                            android:onClick="ViewButtonBlue" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -306,7 +308,7 @@
                             android:focusableInTouchMode="true"
                             android:layout_weight="1"
                             android:clickable="true"
-                            android:onClick="ViewButtonAnim" />
+                            android:onClick="ViewButtonBlack" />
 
                         <ImageView
                             android:layout_width="40dp"
@@ -316,7 +318,7 @@
                             android:minHeight="50dp"
                             android:layout_weight="1"
                             android:clickable="true"
-                            android:onClick="ViewButtonAnim" />
+                            android:onClick="ViewButtonWhite" />
 
                         <ImageView
                             android:layout_width="40dp"
@@ -326,7 +328,7 @@
                             android:background="@drawable/abc_cab_background_top_holo_dark"
                             android:layout_weight="1"
                             android:clickable="true"
-                            android:onClick="ViewButtonAnim" />
+                            android:onClick="ViewButtonBlue" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -363,7 +365,7 @@
                             android:focusableInTouchMode="true"
                             android:layout_weight="1"
                             android:clickable="true"
-                            android:onClick="ViewButtonAnim" />
+                            android:onClick="ViewButtonBlack" />
 
                         <ImageView
                             android:layout_width="40dp"
@@ -373,7 +375,7 @@
                             android:minHeight="50dp"
                             android:layout_weight="1"
                             android:clickable="true"
-                            android:onClick="ViewButtonAnim" />
+                            android:onClick="ViewButtonWhite" />
 
                         <ImageView
                             android:layout_width="40dp"
@@ -383,7 +385,7 @@
                             android:background="@drawable/abc_cab_background_top_holo_dark"
                             android:layout_weight="1"
                             android:clickable="true"
-                            android:onClick="ViewButtonAnim" />
+                            android:onClick="ViewButtonBlue" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -420,7 +422,7 @@
                             android:focusableInTouchMode="true"
                             android:layout_weight="1"
                             android:clickable="true"
-                            android:onClick="ViewButtonAnim" />
+                            android:onClick="ViewButtonBlack" />
 
                         <ImageView
                             android:layout_width="40dp"
@@ -430,7 +432,7 @@
                             android:minHeight="50dp"
                             android:layout_weight="1"
                             android:clickable="true"
-                            android:onClick="ViewButtonAnim" />
+                            android:onClick="ViewButtonWhite" />
 
                         <ImageView
                             android:layout_width="40dp"
@@ -440,7 +442,7 @@
                             android:background="@drawable/abc_cab_background_top_holo_dark"
                             android:layout_weight="1"
                             android:clickable="true"
-                            android:onClick="ViewButtonAnim" />
+                            android:onClick="ViewButtonBlue" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -472,7 +474,7 @@
                         android:focusableInTouchMode="true"
                         android:layout_weight="1"
                         android:clickable="true"
-                        android:onClick="ViewButtonAnim" />
+                        android:onClick="ViewButtonBlack" />
 
                     <ImageView
                         android:layout_width="40dp"
@@ -482,7 +484,7 @@
                         android:minHeight="50dp"
                         android:layout_weight="1"
                         android:clickable="true"
-                        android:onClick="ViewButtonAnim" />
+                        android:onClick="ViewButtonWhite" />
 
                     <ImageView
                         android:layout_width="40dp"
@@ -492,7 +494,7 @@
                         android:background="@drawable/abc_cab_background_top_holo_dark"
                         android:layout_weight="1"
                         android:clickable="true"
-                        android:onClick="ViewButtonAnim" />
+                        android:onClick="ViewButtonBlue" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -523,7 +525,7 @@
                         android:focusableInTouchMode="true"
                         android:layout_weight="1"
                         android:clickable="true"
-                        android:onClick="ViewButtonAnim" />
+                        android:onClick="ViewButtonBlack" />
 
                     <ImageView
                         android:layout_width="40dp"
@@ -533,7 +535,7 @@
                         android:minHeight="50dp"
                         android:layout_weight="1"
                         android:clickable="true"
-                        android:onClick="ViewButtonAnim" />
+                        android:onClick="ViewButtonWhite" />
 
                     <ImageView
                         android:layout_width="40dp"
@@ -543,7 +545,7 @@
                         android:background="@drawable/abc_cab_background_top_holo_dark"
                         android:layout_weight="1"
                         android:clickable="true"
-                        android:onClick="ViewButtonAnim" />
+                        android:onClick="ViewButtonBlue" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -574,7 +576,7 @@
                         android:focusableInTouchMode="true"
                         android:layout_weight="1"
                         android:clickable="true"
-                        android:onClick="ViewButtonAnim" />
+                        android:onClick="ViewButtonBlack" />
 
                     <ImageView
                         android:layout_width="40dp"
@@ -584,7 +586,7 @@
                         android:minHeight="50dp"
                         android:layout_weight="1"
                         android:clickable="true"
-                        android:onClick="ViewButtonAnim" />
+                        android:onClick="ViewButtonWhite" />
 
                     <ImageView
                         android:layout_width="40dp"
@@ -594,7 +596,7 @@
                         android:background="@drawable/abc_cab_background_top_holo_dark"
                         android:layout_weight="1"
                         android:clickable="true"
-                        android:onClick="ViewButtonAnim" />
+                        android:onClick="ViewButtonBlue" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -624,7 +626,7 @@
                         android:focusableInTouchMode="true"
                         android:layout_weight="1"
                         android:clickable="true"
-                        android:onClick="ViewButtonAnim" />
+                        android:onClick="ViewButtonBlack" />
 
                     <ImageView
                         android:layout_width="40dp"
@@ -634,7 +636,7 @@
                         android:minHeight="50dp"
                         android:layout_weight="1"
                         android:clickable="true"
-                        android:onClick="ViewButtonAnim" />
+                        android:onClick="ViewButtonWhite" />
 
                     <ImageView
                         android:layout_width="40dp"
@@ -644,7 +646,7 @@
                         android:background="@drawable/abc_cab_background_top_holo_dark"
                         android:layout_weight="1"
                         android:clickable="true"
-                        android:onClick="ViewButtonAnim" />
+                        android:onClick="ViewButtonBlue" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -675,7 +677,7 @@
                         android:focusableInTouchMode="true"
                         android:layout_weight="1"
                         android:clickable="true"
-                        android:onClick="ViewButtonAnim" />
+                        android:onClick="ViewButtonBlack" />
 
                     <ImageView
                         android:layout_width="40dp"
@@ -685,7 +687,7 @@
                         android:minHeight="50dp"
                         android:layout_weight="1"
                         android:clickable="true"
-                        android:onClick="ViewButtonAnim" />
+                        android:onClick="ViewButtonWhite" />
 
                     <ImageView
                         android:layout_width="40dp"
@@ -695,7 +697,7 @@
                         android:background="@drawable/abc_cab_background_top_holo_dark"
                         android:layout_weight="1"
                         android:clickable="true"
-                        android:onClick="ViewButtonAnim" />
+                        android:onClick="ViewButtonBlue" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -726,7 +728,7 @@
                         android:focusableInTouchMode="true"
                         android:layout_weight="1"
                         android:clickable="true"
-                        android:onClick="ViewButtonAnim" />
+                        android:onClick="ViewButtonBlack" />
 
                     <ImageView
                         android:layout_width="40dp"
@@ -736,7 +738,7 @@
                         android:minHeight="50dp"
                         android:layout_weight="1"
                         android:clickable="true"
-                        android:onClick="ViewButtonAnim" />
+                        android:onClick="ViewButtonWhite" />
 
                     <ImageView
                         android:layout_width="40dp"
@@ -746,7 +748,7 @@
                         android:background="@drawable/abc_cab_background_top_holo_dark"
                         android:layout_weight="1"
                         android:clickable="true"
-                        android:onClick="ViewButtonAnim" />
+                        android:onClick="ViewButtonBlue" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -777,7 +779,7 @@
                         android:focusableInTouchMode="true"
                         android:layout_weight="1"
                         android:clickable="true"
-                        android:onClick="ViewButtonAnim" />
+                        android:onClick="ViewButtonBlack" />
 
                     <ImageView
                         android:layout_width="40dp"
@@ -787,7 +789,7 @@
                         android:minHeight="50dp"
                         android:layout_weight="1"
                         android:clickable="true"
-                        android:onClick="ViewButtonAnim" />
+                        android:onClick="ViewButtonWhite" />
 
                     <ImageView
                         android:layout_width="40dp"
@@ -797,7 +799,7 @@
                         android:background="@drawable/abc_cab_background_top_holo_dark"
                         android:layout_weight="1"
                         android:clickable="true"
-                        android:onClick="ViewButtonAnim" />
+                        android:onClick="ViewButtonBlue" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -828,7 +830,7 @@
                         android:focusableInTouchMode="true"
                         android:layout_weight="1"
                         android:clickable="true"
-                        android:onClick="ViewButtonAnim" />
+                        android:onClick="ViewButtonBlack" />
 
                     <ImageView
                         android:layout_width="40dp"
@@ -838,7 +840,7 @@
                         android:minHeight="50dp"
                         android:layout_weight="1"
                         android:clickable="true"
-                        android:onClick="ViewButtonAnim" />
+                        android:onClick="ViewButtonWhite" />
 
                     <ImageView
                         android:layout_width="40dp"
@@ -848,7 +850,7 @@
                         android:background="@drawable/abc_cab_background_top_holo_dark"
                         android:layout_weight="1"
                         android:clickable="true"
-                        android:onClick="ViewButtonAnim" />
+                        android:onClick="ViewButtonBlue" />
                 </LinearLayout>
 
             </LinearLayout>
