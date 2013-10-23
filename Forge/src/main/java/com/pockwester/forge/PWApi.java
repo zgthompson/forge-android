@@ -11,7 +11,9 @@ public interface PWApi{
     // having to manually type in each task.
     public enum TASKS {
         LOGIN_USER("login_user"),
-        USER_CREATE("user_create");
+        USER_CREATE("user_create"),
+        COURSE_SEARCH("grab_courses"),
+        INSTANCE_SEARCH("grab_instances");
 
         private TASKS(final String text) {
             this.text = text;

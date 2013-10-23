@@ -11,14 +11,29 @@ import org.json.JSONObject;
  */
 public class Course {
 
-    public static final String TABLE_NAME = "courses";
-    public static final String ROW_ID = "_id";
-    public static final String ROW_COURSE_NUMBER = "course_id";
-    public static final String ROW_UNITS = "units";
-    public static final String ROW_TITLE= "title";
+    String title;
+    String catalogName;
+    String id;
 
-    public static final int TYPE = 0;
+    public Course(JSONObject courseObject) throws JSONException {
+        this.title = courseObject.getString("title");
+        this.catalogName = courseObject.getString("subject") + " " + courseObject.getString("catalog_no");
+        this.id = courseObject.getString("id");
+    }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public String getCatalogName() {
+        return catalogName;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    /*
     public static ContentValues jsonToContentValues(JSONObject courseObject) throws JSONException {
         ContentValues values = new ContentValues();
         try {
@@ -31,7 +46,5 @@ public class Course {
         }
         return values;
     }
-
-    // To prevent instantiation
-    private Course() {}
+    */
 }

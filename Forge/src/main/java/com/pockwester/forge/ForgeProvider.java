@@ -27,22 +27,16 @@ public class ForgeProvider extends ContentProvider {
     private static final UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
     private static final String AUTHORITY = "com.pockwester.forge.provider";
-    private static final String COURSE_PATH = "courses";
-    private static final String SECTION_PATH = "sections";
+    private static final String COURSE_INSTANCE_PATH = "course_instances";
 
-    private static final int COURSES = 1;
-    private static final int COURSE_ID = 2;
-    private static final int SECTIONS = 3;
-    private static final int SECTION_ID = 4;
+    private static final int COURSE_INSTANCES = 1;
+    private static final int COURSE_INSTANCE_ID = 2;
 
-    public static final Uri COURSE_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + COURSE_PATH);
-    public static final Uri SECTION_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + SECTION_PATH);
+    public static final Uri COURSE_INSTANCE_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + COURSE_INSTANCE_PATH);
 
     static {
-        uriMatcher.addURI(AUTHORITY, COURSE_PATH, COURSES);
-        uriMatcher.addURI(AUTHORITY, COURSE_PATH + "/#", COURSE_ID);
-        uriMatcher.addURI(AUTHORITY, SECTION_PATH, SECTIONS);
-        uriMatcher.addURI(AUTHORITY, SECTION_PATH + "/#", SECTION_ID);
+        uriMatcher.addURI(AUTHORITY, COURSE_INSTANCE_PATH, COURSE_INSTANCES);
+        uriMatcher.addURI(AUTHORITY, COURSE_INSTANCE_PATH + "/#", COURSE_INSTANCE_ID);
     }
 
     @Override
@@ -64,19 +58,13 @@ public class ForgeProvider extends ContentProvider {
 
         switch (uriMatcher.match(uri)) {
 
-            case COURSES:
-                queryBuilder.setTables(Course.TABLE_NAME);
+            case COURSE_INSTANCES:
+                queryBuilder.setTables(CourseInstance.TABLE_NAME);
                 break;
-            case COURSE_ID:
-                queryBuilder.setTables(Course.TABLE_NAME);
-                queryBuilder.appendWhere(Course.ROW_ID + "=" + uri.getLastPathSegment());
+            case COURSE_INSTANCE_ID:
+                queryBuilder.setTables(CourseInstance.TABLE_NAME);
+                queryBuilder.appendWhere(CourseInstance.ROW_ID + "=" + uri.getLastPathSegment());
                 break;
-            case SECTIONS:
-                queryBuilder.setTables(Section.TABLE_NAME);
-                break;
-            case SECTION_ID:
-                queryBuilder.setTables(Section.TABLE_NAME);
-                queryBuilder.appendWhere(Section.ROW_ID + "=" + uri.getLastPathSegment());
             default:
                 Log.e("forge", uri.toString());
                 throw new IllegalArgumentException("Unknown URI");
@@ -94,14 +82,10 @@ public class ForgeProvider extends ContentProvider {
     public String getType(Uri uri) {
         // Return string that identifies the MIME type for the URI
         switch(uriMatcher.match(uri)) {
-            case COURSES:
-                return "vnd.android.cursor.dir/vnd.pockwester.course";
-            case COURSE_ID:
-                return "vnd.android.cursor.item/vnd.pockwester.course";
-            case SECTIONS:
-                return "vnd.android.cursor.dir/vnd.pockwester.section";
-            case SECTION_ID:
-                return "vnd.android.cursor.item/vnd.pockwester.section";
+            case COURSE_INSTANCES:
+                return "vnd.android.cursor.dir/vnd.pockwester.course_instance";
+            case COURSE_INSTANCE_ID:
+                return "vnd.android.cursor.item/vnd.pockwester.course_instance";
             default:
                 throw new IllegalArgumentException("Unsupported URI" + uri);
         }
@@ -114,17 +98,10 @@ public class ForgeProvider extends ContentProvider {
         Uri outUri = null;
 
         switch (uriMatcher.match(uri)) {
-            case COURSES:
-                rowId = db.insert(Course.TABLE_NAME, Course.ROW_UNITS, values);
+            case COURSE_INSTANCES:
+                rowId = db.insert(CourseInstance.TABLE_NAME, null, values);
                 if (rowId > 0) {
-                    outUri = ContentUris.withAppendedId(COURSE_CONTENT_URI, rowId);
-                }
-                break;
-            case SECTIONS:
-                rowId = db.insert(Section.TABLE_NAME, Section.ROW_TYPE, values);
-                Log.d("forge", "section: " + rowId);
-                if (rowId > 0) {
-                    outUri = ContentUris.withAppendedId(SECTION_CONTENT_URI, rowId);
+                    outUri = ContentUris.withAppendedId(COURSE_INSTANCE_CONTENT_URI, rowId);
                 }
                 break;
             default:
@@ -146,21 +123,13 @@ public class ForgeProvider extends ContentProvider {
         int count;
 
         switch(uriMatcher.match(uri)) {
-            case COURSES:
-                count = db.delete(Course.TABLE_NAME, selection, selectionArgs);
+            case COURSE_INSTANCES:
+                count = db.delete(CourseInstance.TABLE_NAME, selection, selectionArgs);
                 break;
-            case COURSE_ID:
-                newSelection = Course.ROW_ID + "=" + uri.getLastPathSegment() +
+            case COURSE_INSTANCE_ID:
+                newSelection = CourseInstance.ROW_ID + "=" + uri.getLastPathSegment() +
                         (!TextUtils.isEmpty(selection) ? " AND (" + selection + ")" : "");
-                count = db.delete(Course.TABLE_NAME, newSelection, selectionArgs);
-                break;
-            case SECTIONS:
-                count = db.delete(Section.TABLE_NAME, selection, selectionArgs);
-                break;
-            case SECTION_ID:
-                newSelection = Section.ROW_ID + "=" + uri.getLastPathSegment() +
-                        (!TextUtils.isEmpty(selection) ? " AND (" + selection + ")" : "");
-                count = db.delete(Section.TABLE_NAME, newSelection, selectionArgs);
+                count = db.delete(CourseInstance.TABLE_NAME, newSelection, selectionArgs);
                 break;
             default: throw new IllegalArgumentException("Unsupported URI: " + uri);
         }
@@ -175,26 +144,18 @@ public class ForgeProvider extends ContentProvider {
         int count;
 
         switch(uriMatcher.match(uri)) {
-            case COURSES:
-                count = db.update(Course.TABLE_NAME, values, selection, selectionArgs);
+            case COURSE_INSTANCES:
+                count = db.update(CourseInstance.TABLE_NAME, values, selection, selectionArgs);
                 break;
-            case COURSE_ID:
-                newSelection = Course.ROW_ID + "=" + uri.getLastPathSegment() +
+            case COURSE_INSTANCE_ID:
+                newSelection = CourseInstance.ROW_ID + "=" + uri.getLastPathSegment() +
                         (!TextUtils.isEmpty(selection) ? " AND (" + selection + ")" : "");
-                count = db.update(Course.TABLE_NAME, values, newSelection, selectionArgs);
-                break;
-            case SECTIONS:
-                count = db.update(Section.TABLE_NAME, values, selection, selectionArgs);
-                break;
-            case SECTION_ID:
-                newSelection = Section.ROW_ID + "=" + uri.getLastPathSegment() +
-                        (!TextUtils.isEmpty(selection) ? " AND (" + selection + ")" : "");
-                count = db.update(Section.TABLE_NAME, values, newSelection, selectionArgs);
+                count = db.update(CourseInstance.TABLE_NAME, values, newSelection, selectionArgs);
                 break;
             default: throw new IllegalArgumentException("Unsupported URI: " + uri);
         }
+
         getContext().getContentResolver().notifyChange(uri, null);
-        Log.d("forge", "updated a row");
         return count;
     }
 
@@ -204,21 +165,17 @@ public class ForgeProvider extends ContentProvider {
         private static final String DATABASE_NAME = "forge.db";
         private static final int DATABASE_VERSION = 1;
 
-        private static final String CREATE_TABLE_COURSES = "create table " + Course.TABLE_NAME
-                + " (" + Course.ROW_ID + " integer primary key autoincrement, "
-                + Course.ROW_COURSE_NUMBER + " TEXT,"
-                + Course.ROW_UNITS + " TEXT,"
-                + Course.ROW_TITLE + " TEXT" + ");";
-
-        private static final String CREATE_TABLE_SECTIONS = "create table " + Section.TABLE_NAME
-                + " (" + Section.ROW_ID + " integer primary key autoincrement, "
-                + Section.ROW_SECTION_ID + " TEXT,"
-                + Section.ROW_SECTION_NUM + " TEXT,"
-                + Section.ROW_COURSE_ID + " TEXT,"
-                + Section.ROW_BUILDING + " TEXT,"
-                + Section.ROW_INSTRUCTOR + " TEXT,"
-                + Section.ROW_TIME + " TEXT,"
-                + Section.ROW_TYPE + " TEXT" + ");";
+        private static final String CREATE_TABLE_COURSE_INSTANCE = "create table " +
+                CourseInstance.TABLE_NAME + " (" +
+                CourseInstance.ROW_ID + " integer primary key autoincrement, " +
+                CourseInstance.ROW_COURSE_INSTANCE_ID + " TEXT," +
+                CourseInstance.ROW_CATALOG_NAME + " TEXT," +
+                CourseInstance.ROW_TITLE + " TEXT," +
+                CourseInstance.ROW_SECTION_ID + " TEXT," +
+                CourseInstance.ROW_LOCATION + " TEXT," +
+                CourseInstance.ROW_TIME + " TEXT," +
+                CourseInstance.ROW_COMPONENT + " TEXT," +
+                CourseInstance.ROW_DAY + " TEXT" + ");";
 
         public ForgeDBHelper(Context context, String name,
                                    SQLiteDatabase.CursorFactory factory, int version) {
@@ -227,14 +184,12 @@ public class ForgeProvider extends ContentProvider {
 
         @Override
         public void onCreate(SQLiteDatabase db) {
-            db.execSQL(CREATE_TABLE_COURSES);
-            db.execSQL(CREATE_TABLE_SECTIONS);
+            db.execSQL(CREATE_TABLE_COURSE_INSTANCE);
         }
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            db.execSQL("DROP TABLE IF EXISTS " + Course.TABLE_NAME);
-            db.execSQL("DROP TABLE IF EXISTS " + Section.TABLE_NAME);
+            db.execSQL("DROP TABLE IF EXISTS " + CourseInstance.TABLE_NAME);
             onCreate(db);
         }
     }

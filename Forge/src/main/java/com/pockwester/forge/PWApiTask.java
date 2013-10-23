@@ -61,11 +61,11 @@ public class PWApiTask extends AsyncTask<String, String, String> {
             ResponseHandler<String> responseHandler = new BasicResponseHandler();
             return client.execute(httpPost, responseHandler);
         } catch (IOException e) {
-            Log.e("forge", "IOException in DBSyncService.postToServer", e);
+            Log.e("forge", "IOException in PWApiTask.doInBackground", e);
+            return "Could not connect to API";
+        } finally {
+            client.close();
         }
-
-
-        return "Could not connect to API";
     }
 
     // Do the callback on the callback object

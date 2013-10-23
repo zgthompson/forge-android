@@ -1,5 +1,6 @@
 package com.pockwester.forge;
 
+import android.annotation.TargetApi;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -19,38 +20,16 @@ import java.util.Set;
 
 public class MainActivity extends Activity {
 
-    private ProgressDialog progressDialog;
-
-    private BroadcastReceiver receiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Bundle bundle = intent.getExtras();
-            if (bundle != null) {
-                int resultCode = bundle.getInt(DBSyncService.RESULT);
-                if (resultCode == RESULT_OK) {
-                    progressDialog.dismiss();
-                }
-            }
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        // updates database
-		startService(new Intent(this, DBSyncService.class));
-        // creates loading spinner
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Syncing database");
-        progressDialog.show();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        registerReceiver(receiver, new IntentFilter(DBSyncService.NOTIFICATION));
 
         // Set the username text if available
         SharedPreferences settings = getSharedPreferences( PrefFileNames.USER_PREFS, 0);
@@ -124,7 +103,6 @@ public class MainActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
-        unregisterReceiver(receiver);
     }
 
     @Override

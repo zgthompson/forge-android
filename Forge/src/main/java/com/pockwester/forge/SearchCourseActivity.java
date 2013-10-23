@@ -2,122 +2,150 @@ package com.pockwester.forge;
 
 import android.app.ActionBar;
 import android.app.ListActivity;
-import android.app.LoaderManager;
-import android.app.SearchManager;
-import android.content.Context;
-import android.content.CursorLoader;
 import android.content.Intent;
-import android.content.Loader;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.SearchView;
-import android.widget.SimpleCursorAdapter;
-import android.widget.Toast;
 
-public class SearchCourseActivity extends ListActivity
-        implements LoaderManager.LoaderCallbacks<Cursor> {
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-    private static String QUERY = "QUERY";
-    private SimpleCursorAdapter adapter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+
+public class SearchCourseActivity extends ListActivity implements PWApi {
+
+    private String query;
+    private ArrayAdapter<Course> adapter;
+    private List<Course> courseList;
+    private boolean searching;
+    private boolean newQuery;
+    private Timer timer;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // Create adapter and bind it to list view
-        adapter = new SimpleCursorAdapter(this, android.R.layout.simple_list_item_2, null,
-                new String[] { Course.ROW_COURSE_NUMBER, Course.ROW_TITLE },
-                new int[] {android.R.id.text1, android.R.id.text2} , 0);
+        query = "";
+        searching = false;
+        newQuery = false;
+        courseList = new ArrayList<Course>();
+        adapter = new CourseAdapter(this, courseList);
 
         setListAdapter(adapter);
 
-        // Initiate cursor loader
-        getLoaderManager().initLoader(0, null, this);
-
-        // Show all courses
-        updateLoader("");
 
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            public void run() {
+                checkForUpdates();
+            }
+        }, 1000, 1000);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        timer.cancel();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
         ActionBar actionBar = getActionBar();
-        actionBar.setCustomView(R.layout.search_bar);
-        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
 
-        LinearLayout linearLayout = (LinearLayout) actionBar.getCustomView();
+        if (actionBar != null) {
 
-        EditText editText = (EditText) linearLayout.getChildAt(1);
+            actionBar.setCustomView(R.layout.search_bar);
+            actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
 
-        editText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            LinearLayout linearLayout = (LinearLayout) actionBar.getCustomView();
+
+            EditText editText = (EditText) linearLayout.getChildAt(1);
+
+            if (editText != null) {
+
+                editText.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        // sets query to most recent text
+                        if (s.length() > 1) {
+                            query = s.toString();
+                            newQuery = true;
+                        }
+                        else {
+                            newQuery = false;
+                        }
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                    }
+                });
             }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // update list view to display courses matching current text
-                updateLoader(s.toString());
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
+        }
 
         return true;
     }
 
+    @Override
+    public void hasResult(TASKS task, String result) {
+        courseList.clear();
+        try {
+            JSONObject jsonResult = new JSONObject(result);
+            JSONArray courseArray = jsonResult.getJSONArray("courses");
+            for (int i = 0; i < courseArray.length(); i++) {
+               courseList.add(new Course(courseArray.getJSONObject(i))) ;
+            }
+        } catch (JSONException e) {
+            Log.e("forge", "JSONException in SearchCourseActivity.hasResult", e);
+        }
+
+        adapter.notifyDataSetChanged();
+
+        searching = false;
+    }
+
     public void onListItemClick(ListView l, View v, int position, long id) {
         Intent detailIntent = new Intent(this, CourseDetailActivity.class);
-        detailIntent.putExtra("id", id);
+        detailIntent.putExtra("course_id", v.getTag().toString());
         startActivity(detailIntent);
     }
 
-    private void updateLoader(String queryStr) {
-        // Pass search query to the Cursor Loader
-        Bundle args = new Bundle();
-        args.putString(QUERY, queryStr);
-       // Restart Cursor Loader to execute new query
-        getLoaderManager().restartLoader(0, args, this);
-    }
+    private void checkForUpdates() {
+        Log.d("forge", "checking");
+        if (!searching && newQuery) {
 
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        String query = "";
-        if (args != null) {
-            // Extract search query
-            query = args.getString(QUERY);
+            searching = true;
+            newQuery = false;
+
+            List<NameValuePair> args = new ArrayList<NameValuePair>();
+            args.add(new BasicNameValuePair("like", query));
+
+            new PWApiTask(TASKS.COURSE_SEARCH, args, SearchCourseActivity.this).execute();
         }
-        // Construct new query
-        String[] projection = { Course.ROW_ID, Course.ROW_COURSE_NUMBER, Course.ROW_TITLE };
-
-        String where = Course.ROW_COURSE_NUMBER + " LIKE \"%" + query + "%\" OR " +
-                Course.ROW_TITLE + " LIKE \"%" + query + "%\"";
-        String[] whereArgs = null;
-        String sortOrder = Course.ROW_COURSE_NUMBER + " COLLATE LOCALIZED ASC";
-
-        // Create the new Cursor loader
-        return new CursorLoader(this, ForgeProvider.COURSE_CONTENT_URI, projection, where, whereArgs,
-                sortOrder);
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        adapter.swapCursor(data);
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-        adapter.swapCursor(null);
     }
 }
