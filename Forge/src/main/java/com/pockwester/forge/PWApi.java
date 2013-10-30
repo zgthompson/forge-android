@@ -10,10 +10,11 @@ public interface PWApi{
     // Enumeration of the PWApi tasks. This allows consolidation of the api tasks rather than
     // having to manually type in each task.
     public enum TASKS {
-        LOGIN_USER("login_user"),
-        USER_CREATE("user_create"),
+        LOGIN("login"),
+        CREATE_STUDENT("create_student"),
         COURSE_SEARCH("grab_courses"),
-        INSTANCE_SEARCH("grab_instances");
+        INSTANCE_SEARCH("grab_instances"),
+        UPDATE_COURSE("update_student_courses");
 
         private TASKS(final String text) {
             this.text = text;

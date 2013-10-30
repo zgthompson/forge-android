@@ -1,7 +1,9 @@
 package com.pockwester.forge;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -35,6 +37,45 @@ public class CourseInstance {
     String catalogName;
     Map<String, Section> sections;
 
+    public static void addToDB(CourseInstance instance, Context context) {
+
+        String[] projection = new String[] { ROW_COURSE_INSTANCE_ID };
+        String where = ROW_COURSE_INSTANCE_ID + "=" + instance.getId();
+        Cursor findInstance = context.getContentResolver()
+                .query(ForgeProvider.COURSE_INSTANCE_CONTENT_URI, projection, where, null, null);
+
+        // only add instance if it is not in the db already
+        if (!findInstance.moveToFirst()) {
+            for (ContentValues values : instance.createContentValuesList()) {
+                Uri uri = context.getContentResolver().insert(ForgeProvider.COURSE_INSTANCE_CONTENT_URI, values);
+                Log.d("forge: inserting ", uri.toString());
+            }
+        }
+        findInstance.close();
+    }
+
+    public static Collection<CourseInstance> createInstanceCollection(String jsonString) {
+        Map<String, CourseInstance> instanceMap = new HashMap<String, CourseInstance>();
+        try {
+            JSONObject jsonResult = new JSONObject(jsonString);
+            JSONArray instanceArray = jsonResult.getJSONArray("instances");
+            for (int i = 0; i < instanceArray.length(); i++) {
+                JSONObject curInstance = instanceArray.getJSONObject(i);
+                String instance_id = curInstance.getString("course_instance_id");
+                if (instanceMap.containsKey(instance_id)) {
+                    instanceMap.get(instance_id).addSection(curInstance);
+                }
+                else {
+                    instanceMap.put(instance_id, new CourseInstance(curInstance));
+                }
+            }
+        }
+        catch (JSONException e) {
+            Log.e("forge", "JSONException in CourseInstance.createInstanceCollection", e);
+        }
+
+        return instanceMap.values();
+    }
 
     public CourseInstance(JSONObject instanceObject) throws JSONException {
         this.title = instanceObject.getString("title");
@@ -47,7 +88,6 @@ public class CourseInstance {
     public CourseInstance(Cursor instanceCursor) {
 
         instanceCursor.moveToFirst();
-        Log.d("forge: count ", String.valueOf(instanceCursor.getCount()));
 
         this.title = instanceCursor.getString(instanceCursor.getColumnIndex(CourseInstance.ROW_TITLE));
         this.catalogName= instanceCursor.getString(instanceCursor.getColumnIndex(CourseInstance.ROW_CATALOG_NAME));
@@ -92,28 +132,9 @@ public class CourseInstance {
         return valueList;
     }
 
-    public static Collection<CourseInstance> createInstanceCollection(String jsonString) {
-        Map<String, CourseInstance> instanceMap = new HashMap<String, CourseInstance>();
-        try {
-            JSONObject jsonResult = new JSONObject(jsonString);
-            JSONArray instanceArray = jsonResult.getJSONArray("instances");
-            for (int i = 0; i < instanceArray.length(); i++) {
-                JSONObject curInstance = instanceArray.getJSONObject(i);
-                String instance_id = curInstance.getString("course_instance_id");
-                if (instanceMap.containsKey(instance_id)) {
-                    instanceMap.get(instance_id).addSection(curInstance);
-                }
-                else {
-                    instanceMap.put(instance_id, new CourseInstance(curInstance));
-                }
-            }
-        }
-        catch (JSONException e) {
-            Log.e("forge", "JSONException in CourseInstance.createInstanceCollection", e);
-        }
 
-        return instanceMap.values();
-    }
+
+
 
     public void addSection(JSONObject instanceObject) throws JSONException {
         String section_id = instanceObject.getString("section_id");

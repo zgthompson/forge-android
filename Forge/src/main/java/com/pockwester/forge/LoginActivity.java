@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.View;
 import android.widget.TextView;
@@ -13,7 +14,6 @@ import org.apache.http.message.BasicNameValuePair;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /**
  * Created by AW on 10/2/13.
@@ -21,7 +21,7 @@ import java.util.Random;
  */
 public class LoginActivity extends Activity implements PWApi {
 
-    private String attemptUserName = "";
+    private String attemptUserName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +49,7 @@ public class LoginActivity extends Activity implements PWApi {
         t = (TextView) findViewById(R.id.password);
         nameValuePairs.add(new BasicNameValuePair("password", t.getText().toString()));
 
-        new PWApiTask( TASKS.LOGIN_USER, nameValuePairs, this ).execute();
+        new PWApiTask( TASKS.LOGIN, nameValuePairs, this ).execute();
     }
 
     // Starts the new user activity
@@ -64,11 +64,8 @@ public class LoginActivity extends Activity implements PWApi {
         // If the PWApi returns a numeric value then this is the user_id of the user
         if( Utilities.IsNumeric( result ) )
         {
-            SharedPreferences settings = getSharedPreferences(PrefFileNames.USER_PREFS, 0);
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putString( "USER", attemptUserName );
-            editor.putInt( "USER_ID", Integer.parseInt( result ) );
-            editor.commit();
+            PreferenceManager.getDefaultSharedPreferences(this).edit().putString("user", result).commit();
+            getSharedPreferences(result, 0).edit().putString("username", attemptUserName).commit();
 
             this.finish();
         }

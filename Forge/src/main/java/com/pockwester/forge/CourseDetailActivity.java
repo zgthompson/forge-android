@@ -5,6 +5,7 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -72,37 +73,48 @@ public class CourseDetailActivity extends ListActivity implements PWApi {
 
     @Override
     public void hasResult(TASKS task, String result) {
-        instanceList.clear();
+        if (task == TASKS.INSTANCE_SEARCH) {
+            instanceList.clear();
 
 
-        for (CourseInstance instance : CourseInstance.createInstanceCollection(result)) {
-            instanceList.add(instance);
+            for (CourseInstance instance : CourseInstance.createInstanceCollection(result)) {
+                instanceList.add(instance);
+            }
+
+            adapter.notifyDataSetChanged();
         }
-
-        adapter.notifyDataSetChanged();
+        else if (task == TASKS.UPDATE_COURSE) {
+            startActivity(new Intent(this, CourseIndexActivity.class));
+        }
     }
 
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String student_id = PreferenceManager.getDefaultSharedPreferences(this).getString("user", "");
+        SharedPreferences prefs = getSharedPreferences(student_id, 0);
         Set<String> instance_ids = new HashSet<String>(prefs.getStringSet("instance_ids", new HashSet<String>()));
 
         String instance_id = v.getTag().toString();
 
-        if (!instance_ids.contains(instance_id))
-            instance_ids.add(v.getTag().toString());
+        if (!instance_ids.contains(instance_id)) {
+            //update course list for student on android
+            instance_ids.add(instance_id);
             prefs.edit().putStringSet("instance_ids", instance_ids).apply();
-            addCourseInstanceToDB(instanceList.get(position));
+            CourseInstance.addToDB(instanceList.get(position), this);
 
-        startActivity(new Intent(this, CourseIndexActivity.class));
-    }
+            // inform api that course has been added
+            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+            nameValuePairs.add(new BasicNameValuePair("student_id", student_id));
+            nameValuePairs.add(new BasicNameValuePair("instance_id", instance_id));
+            nameValuePairs.add(new BasicNameValuePair("action", "add"));
 
-    private void addCourseInstanceToDB(CourseInstance instance) {
-        for (ContentValues values : instance.createContentValuesList()) {
-            Uri uri = getContentResolver().insert(ForgeProvider.COURSE_INSTANCE_CONTENT_URI, values);
-            Log.d("forge: inserting ", uri.toString());
+            new PWApiTask( TASKS.UPDATE_COURSE, nameValuePairs, this ).execute();
         }
+        else {
+            startActivity(new Intent(this, CourseIndexActivity.class));
+        }
+
     }
 }

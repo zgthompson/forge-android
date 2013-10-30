@@ -136,7 +136,6 @@ public class SearchCourseActivity extends ListActivity implements PWApi {
     }
 
     private void checkForUpdates() {
-        Log.d("forge", "checking");
         if (!searching && newQuery) {
 
             searching = true;

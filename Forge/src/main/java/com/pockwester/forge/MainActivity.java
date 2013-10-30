@@ -1,22 +1,14 @@
 package com.pockwester.forge;
 
-import android.annotation.TargetApi;
-import android.app.ProgressDialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.app.Activity;
-import android.util.Log;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
-
-import java.util.Set;
 
 public class MainActivity extends Activity {
 
@@ -32,18 +24,19 @@ public class MainActivity extends Activity {
         super.onResume();
 
         // Set the username text if available
-        SharedPreferences settings = getSharedPreferences( PrefFileNames.USER_PREFS, 0);
-        String UN = settings.getString("USER",null);
-        int U = settings.getInt( "USER_ID", 0 );
-        TextView t = (TextView) findViewById(R.id.outputText);
 
-        if( UN == null || UN.length() <= 0 )
+        String user = PreferenceManager.getDefaultSharedPreferences(this).getString("user", null);
+
+        if( user == null )
         {
             logoutUser();
         }
         else
         {
-            t.setText( "Hello " + UN );
+            TextView t = (TextView) findViewById(R.id.outputText);
+            String username = getSharedPreferences(user, 0).getString("username", "");
+
+            t.setText( "Hello " + username);
             Button btn = (Button) findViewById( R.id.loginButton );
             btn.setText( "Logout" );
 
@@ -70,11 +63,7 @@ public class MainActivity extends Activity {
     private void logoutUser()
     {
         // Clear the login prefs
-        SharedPreferences settings = getSharedPreferences(PrefFileNames.USER_PREFS, 0);
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putString( "USER", "" );
-        editor.putInt( "USER_ID", 0 );
-        editor.commit();
+        PreferenceManager.getDefaultSharedPreferences(this).edit().putString("user", null).commit();
 
         // Set the main view to reflect the user is not logged in
         TextView t = (TextView) findViewById(R.id.outputText);
