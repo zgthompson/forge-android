@@ -241,7 +241,5 @@ public class CourseInstance {
 
             return output;
         }
-
-
     }
 }

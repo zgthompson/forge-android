@@ -1,69 +1,61 @@
 package com.pockwester.forge;
 
-import android.content.Context;
-import android.graphics.Point;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.app.Activity;
-import android.view.Display;
-import android.view.Menu;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import android.app.Activity;
-import android.content.ContentUris;
-import android.database.Cursor;
-import android.net.Uri;
-import android.os.Bundle;
-import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.ToggleButton;
 
 /**
- * Created by AW on 10/1/13.
+ * Created by ZGT on 10/31/13.
  * Window that shows the availability of the user. This requires that the
  * user be authenticated through the PWApi services.
  */
 public class AvailabilityActivity extends Activity {
-    protected int black;
-    protected int white;
-    protected int blue;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.availability);
-        black =0;
-        blue =0;
-        white = 0;
+        setContentView(R.layout.activity_availability);
+        populateView();
+
     }
 
-    public void ViewButtonBlack(View imgvuw){
-            if((black % 2) == 0){
-                imgvuw.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
-            }
-            else{ imgvuw.setBackgroundResource(R.drawable.abc_ab_bottom_solid_dark_holo);
-            }
-        black = (black + 1);
-        //findViewById(R.id.imageView16)
-              }
+    public void onToggleClicked(View view) {
+        boolean on = ((ToggleButton) view).isChecked();
 
-    public void ViewButtonWhite(View imgvuw){
-        if((white % 2) == 0){
-            imgvuw.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
+        if (on) {
+            view.setBackgroundColor(Color.GREEN);
         }
-        else{ imgvuw.setBackgroundResource(R.drawable.abc_ab_bottom_solid_light_holo);
+        else {
+            view.setBackgroundColor(Color.RED);
         }
-        white = (white + 1);
     }
 
-    public void ViewButtonBlue(View imgvuw){
-        if((blue % 2) == 0){
-            imgvuw.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
+    private void populateView() {
+        // Grab parent view and view inflater
+        LinearLayout parentView = (LinearLayout) findViewById(R.id.avail_holder);
+        LayoutInflater inflater = getLayoutInflater();
+
+        View view = null;
+
+        for (int i = 0; i < 15; i++) {
+            view = inflater.inflate(R.layout.avail_row, null);
+            ((TextView) view.findViewById(R.id.avail_time)).setText(indexToTime(i));
+            view.setTag(i);
+            parentView.addView(view);
         }
-        else{ imgvuw.setBackgroundResource(R.drawable.abc_cab_background_top_holo_dark);
-        }
-        blue = (blue + 1);
+    }
+
+    private String indexToTime(int index) {
+        String result = "";
+        result += (index + 7) % 12 + 1;
+        result += index > 3 ? " PM" : " AM";
+        return result;
     }
 
     @Override
@@ -72,5 +64,4 @@ public class AvailabilityActivity extends Activity {
         getMenuInflater().inflate(R.menu.availability, menu);
         return true;
     }
-
 }

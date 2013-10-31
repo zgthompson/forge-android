@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="8 AM"
+        android:id="@+id/avail_time" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="7">
+
+        <ToggleButton
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textOn="M"
+            android:textOff="M"
+            android:tag="@string/monday"
+            android:layout_weight="1"
+            android:onClick="onToggleClicked"/>
+
+        <ToggleButton
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textOn="Tu"
+            android:textOff="Tu"
+            android:tag="@string/tuesday"
+            android:onClick="onToggleClicked"
+            android:layout_weight="1" />
+
+        <ToggleButton
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textOn="W"
+            android:textOff="W"
+            android:tag="@string/wednesday"
+            android:onClick="onToggleClicked"
+            android:layout_weight="1" />
+
+        <ToggleButton
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textOn="Th"
+            android:textOff="Th"
+            android:tag="@string/thursday"
+            android:onClick="onToggleClicked"
+            android:layout_weight="1" />
+
+        <ToggleButton
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textOn="F"
+            android:textOff="F"
+            android:tag="@string/friday"
+            android:onClick="onToggleClicked"
+            android:layout_weight="1" />
+
+        <ToggleButton
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textOn="Sa"
+            android:textOff="Sa"
+            android:tag="@string/saturday"
+            android:onClick="onToggleClicked"
+            android:layout_weight="1" />
+
+        <ToggleButton
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textOn="Su"
+            android:textOff="Su"
+            android:tag="@string/sunday"
+            android:onClick="onToggleClicked"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+</LinearLayout>

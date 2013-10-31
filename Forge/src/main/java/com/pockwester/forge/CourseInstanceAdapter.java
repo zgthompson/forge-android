@@ -27,8 +27,8 @@ public class CourseInstanceAdapter extends ArrayAdapter<CourseInstance> {
         View view = null;
 
         if (convertView == null) {
-            LayoutInflater inflator = context.getLayoutInflater();
-            view = inflator.inflate(android.R.layout.simple_list_item_2, null);
+            LayoutInflater inflater = context.getLayoutInflater();
+            view = inflater.inflate(android.R.layout.simple_list_item_2, null);
         }
         else {
             view = convertView;

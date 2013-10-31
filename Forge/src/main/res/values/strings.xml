@@ -17,5 +17,12 @@
     <string name="title_activity_availability__fullscreen">Availibility Fullscreen</string>
     <string name="title_activity_test">TestActivity</string>
     <string name="user_prefs_file_name">USER_PREFS</string>
+    <string name="monday">0</string>
+    <string name="tuesday">1</string>
+    <string name="wednesday">2</string>
+    <string name="thursday">3</string>
+    <string name="friday">4</string>
+    <string name="saturday">5</string>
+    <string name="sunday">6</string>
 
 </resources>
