@@ -13,7 +13,8 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="7">
+        android:layout_weight="7"
+        android:id="@+id/day_holder">
 
         <ToggleButton
             style="?android:attr/buttonStyleSmall"
@@ -21,7 +22,6 @@
             android:layout_height="wrap_content"
             android:textOn="M"
             android:textOff="M"
-            android:tag="@string/monday"
             android:layout_weight="1"
             android:onClick="onToggleClicked"/>
 
@@ -31,7 +31,6 @@
             android:layout_height="wrap_content"
             android:textOn="Tu"
             android:textOff="Tu"
-            android:tag="@string/tuesday"
             android:onClick="onToggleClicked"
             android:layout_weight="1" />
 
@@ -41,7 +40,6 @@
             android:layout_height="wrap_content"
             android:textOn="W"
             android:textOff="W"
-            android:tag="@string/wednesday"
             android:onClick="onToggleClicked"
             android:layout_weight="1" />
 
@@ -51,7 +49,6 @@
             android:layout_height="wrap_content"
             android:textOn="Th"
             android:textOff="Th"
-            android:tag="@string/thursday"
             android:onClick="onToggleClicked"
             android:layout_weight="1" />
 
@@ -61,7 +58,6 @@
             android:layout_height="wrap_content"
             android:textOn="F"
             android:textOff="F"
-            android:tag="@string/friday"
             android:onClick="onToggleClicked"
             android:layout_weight="1" />
 
@@ -71,7 +67,6 @@
             android:layout_height="wrap_content"
             android:textOn="Sa"
             android:textOff="Sa"
-            android:tag="@string/saturday"
             android:onClick="onToggleClicked"
             android:layout_weight="1" />
 
@@ -81,7 +76,6 @@
             android:layout_height="wrap_content"
             android:textOn="Su"
             android:textOff="Su"
-            android:tag="@string/sunday"
             android:onClick="onToggleClicked"
             android:layout_weight="1" />
     </LinearLayout>

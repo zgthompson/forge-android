@@ -14,7 +14,9 @@ public interface PWApi{
         CREATE_STUDENT("create_student"),
         COURSE_SEARCH("grab_courses"),
         INSTANCE_SEARCH("grab_instances"),
-        UPDATE_COURSE("update_student_courses");
+        UPDATE_COURSE("update_student_courses"),
+        UPDATE_AVAILABILITY("update_availability"),
+        GET_AVAILABILITY("grab_availability");
 
         private TASKS(final String text) {
             this.text = text;
