@@ -58,7 +58,7 @@ public class AvailabilityActivity extends Activity implements PWApi {
         }
         else {
             view.setBackgroundColor(Color.RED);
-            availList.set(availIndex, '1');
+            availList.set(availIndex, '0');
         }
     }
 
@@ -97,7 +97,7 @@ public class AvailabilityActivity extends Activity implements PWApi {
                 dayButton.setTag(j);
 
                 char timeValue = availList.get(j * 24 + i);
-                if (timeValue == '1') {
+                if (timeValue == '0') {
                     dayButton.setBackgroundColor(Color.RED);
                 }
                 else if (timeValue == '2') {
