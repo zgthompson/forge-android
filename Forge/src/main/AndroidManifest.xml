@@ -16,8 +16,10 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.pockwester.forge.MainActivity"
-            android:label="@string/app_name" >
+            android:name=".activities.SplashScreen"
+            android:label="@string/app_name"
+            android:noHistory="true" >
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -25,34 +27,42 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.pockwester.forge.AvailabilityActivity"
-            android:label="Availability Screen">
+            android:name=".activities.MainActivity"
+            android:label="Forge" >
         </activity>
         <activity
-            android:name="com.pockwester.forge.NewUserActivity"
-            android:label="Create New User">
+            android:name=".activities.AvailabilityActivity"
+            android:label="Availability Screen" >
         </activity>
         <activity
-            android:name="com.pockwester.forge.LoginActivity"
-            android:label="Login">
+            android:name=".activities.NewUserActivity"
+            android:label="Create New User" >
         </activity>
         <activity
-            android:name="com.pockwester.forge.CourseIndexActivity"
+            android:name=".activities.LoginActivity"
+            android:label="Login" >
+        </activity>
+        <activity
+            android:name=".activities.CourseIndexActivity"
             android:label="My Courses" >
         </activity>
         <activity
-            android:name="com.pockwester.forge.SearchCourseActivity"
+            android:name=".activities.SearchCourseActivity"
             android:label="Course Search" >
         </activity>
 
         <provider
-            android:name="com.pockwester.forge.ForgeProvider"
+            android:name=".providers.ForgeProvider"
             android:authorities="com.pockwester.forge.provider" />
 
         <activity
-            android:name="com.pockwester.forge.CourseDetailActivity"
+            android:name=".activities.CourseDetailActivity"
             android:label="Add Course" >
         </activity>
+
+        <activity android:name=".activities.ForgeIndexActivity"
+            android:label="Find Group" />
+
     </application>
 
 </manifest>

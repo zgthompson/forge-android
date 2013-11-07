@@ -1,4 +1,4 @@
-package com.pockwester.forge;
+package com.pockwester.forge.activities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -8,6 +8,11 @@ import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.View;
 import android.widget.TextView;
+
+import com.pockwester.forge.utils.PWApi;
+import com.pockwester.forge.utils.PWApiTask;
+import com.pockwester.forge.R;
+import com.pockwester.forge.utils.Utilities;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -62,11 +67,15 @@ public class LoginActivity extends Activity implements PWApi {
     public void hasResult( PWApi.TASKS task, String result )
     {
         // If the PWApi returns a numeric value then this is the user_id of the user
-        if( Utilities.IsNumeric( result ) )
+        if( Utilities.IsNumeric(result) )
         {
             PreferenceManager.getDefaultSharedPreferences(this).edit().putString("user", result).commit();
-            getSharedPreferences(result, 0).edit().putString("username", attemptUserName).commit();
 
+            SharedPreferences.Editor prefsEditor = getSharedPreferences(result, 0).edit();
+            prefsEditor.putString("username", attemptUserName).commit();
+            prefsEditor.putBoolean("courses_set", true).commit();
+
+            startActivity( new Intent(this, MainActivity.class) );
             this.finish();
         }
         else

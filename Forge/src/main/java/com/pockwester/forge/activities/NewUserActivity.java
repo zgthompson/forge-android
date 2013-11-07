@@ -1,4 +1,4 @@
-package com.pockwester.forge;
+package com.pockwester.forge.activities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -7,6 +7,11 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+
+import com.pockwester.forge.utils.PWApi;
+import com.pockwester.forge.utils.PWApiTask;
+import com.pockwester.forge.R;
+import com.pockwester.forge.utils.Utilities;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -17,7 +22,7 @@ import java.util.List;
 /**
  * Created by AW on 10/2/13.
  */
-public class NewUserActivity extends Activity implements PWApi{
+public class NewUserActivity extends Activity implements PWApi {
 
     private String attemptUsername;
 
@@ -53,7 +58,8 @@ public class NewUserActivity extends Activity implements PWApi{
             Log.d("forge", "user: " + result);
             PreferenceManager.getDefaultSharedPreferences(this).edit().putString("user", result).commit();
             getSharedPreferences(result, 0).edit().putString("username", attemptUsername).commit();
-            startActivity(new Intent(this, MainActivity.class));
+            startActivity( new Intent(this, CourseIndexActivity.class) );
+            finish();
         }
         else
         {

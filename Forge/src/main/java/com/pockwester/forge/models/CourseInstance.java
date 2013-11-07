@@ -1,10 +1,12 @@
-package com.pockwester.forge;
+package com.pockwester.forge.models;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.util.Log;
+
+import com.pockwester.forge.providers.ForgeProvider;
 
 import org.json.JSONArray;
 import org.json.JSONException;

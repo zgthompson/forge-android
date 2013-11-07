@@ -1,8 +1,10 @@
-package com.pockwester.forge;
+package com.pockwester.forge.utils;
 
 import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
 import android.util.Log;
+
+import com.pockwester.forge.utils.PWApi;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ResponseHandler;

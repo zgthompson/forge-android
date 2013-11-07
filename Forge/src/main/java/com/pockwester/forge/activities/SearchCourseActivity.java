@@ -1,4 +1,4 @@
-package com.pockwester.forge;
+package com.pockwester.forge.activities;
 
 import android.app.ActionBar;
 import android.app.ListActivity;
@@ -13,6 +13,12 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+
+import com.pockwester.forge.models.Course;
+import com.pockwester.forge.adapters.CourseAdapter;
+import com.pockwester.forge.utils.PWApi;
+import com.pockwester.forge.utils.PWApiTask;
+import com.pockwester.forge.R;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;

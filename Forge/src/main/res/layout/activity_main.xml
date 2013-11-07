@@ -1,69 +1,19 @@
-<RelativeLayout     xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".MainActivity"
+    android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context=".MainActivity"
-    android:gravity="center"
-    android:clickable="false"
-    android:background="@drawable/backgroundtest"
-    style="@style/Global">
+    android:clickable="false" >
 
-    <ImageButton
-        android:layout_width="125dp"
-        android:layout_height="150dp"
-        android:text="New Button"
-        android:id="@+id/forge_button"
-        android:src="@drawable/anvil_icon"
-        android:layout_gravity="center"
-        android:layout_marginTop="50dp"
-        android:layout_marginBottom="50dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"/>
-
-    <Button
-        android:layout_width="wrap_content"
+    <ListView
         android:layout_height="wrap_content"
-        android:text="Classes"
-        android:id="@+id/class_button"
-        android:onClick="openCourseIndex"
-        android:layout_gravity="center_horizontal"
-        style="@style/DefaultButton"
-        android:layout_below="@+id/forge_button"
-        android:layout_alignLeft="@+id/availability_button" />
+        android:layout_width="match_parent"
+        android:id="@+id/main_list"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Availability"
-        android:id="@+id/availability_button"
-        android:layout_gravity="center_horizontal"
-        android:onClick="openAvailability"
-        style="@style/DefaultButton"
-        android:layout_below="@+id/class_button"
-        android:layout_centerHorizontal="true" />
+</LinearLayout>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Login"
-        android:id="@+id/loginButton"
-        android:layout_gravity="center_horizontal"
-        android:onClick="openLogin"
-        style="@style/DefaultButton"
-        android:layout_below="@+id/availability_button"
-        android:layout_alignLeft="@+id/class_button" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/outputText"
-        android:text="LOL"
-        android:gravity="center"
-        android:layout_alignLeft="@+id/class_button"
-        android:layout_alignRight="@+id/class_button"/>
-
-</RelativeLayout>

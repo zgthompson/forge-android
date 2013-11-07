@@ -1,6 +1,5 @@
-package com.pockwester.forge;
+package com.pockwester.forge.providers;
 
-import android.app.SearchManager;
 import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -15,7 +14,7 @@ import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 
-import java.util.HashMap;
+import com.pockwester.forge.models.CourseInstance;
 
 /**
  * Created by zack on 9/6/13.

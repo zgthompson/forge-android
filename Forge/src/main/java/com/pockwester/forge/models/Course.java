@@ -1,4 +1,4 @@
-package com.pockwester.forge;
+package com.pockwester.forge.models;
 
 import android.content.ContentValues;
 import android.util.Log;
@@ -19,6 +19,11 @@ public class Course {
         this.title = courseObject.getString("title");
         this.catalogName = courseObject.getString("subject") + " " + courseObject.getString("catalog_no");
         this.id = courseObject.getString("id");
+    }
+
+    public Course(String title, String catalogName) {
+        this.title = title;
+        this.catalogName = catalogName;
     }
 
     public String getTitle() {

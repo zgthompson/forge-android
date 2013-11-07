@@ -1,6 +1,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/action_settings"
-        android:title="@string/action_settings"
+    <item
+        android:title="Update courses"
         android:orderInCategory="100"
+        android:id="@+id/update_course"
+        android:showAsAction="never" />
+    <item
+        android:title="Update availability"
+        android:orderInCategory="100"
+        android:id="@+id/update_avail"
+        android:showAsAction="never" />
+    <item
+        android:title="Logout"
+        android:orderInCategory="100"
+        android:id="@+id/logout"
         android:showAsAction="never" />
 </menu>

@@ -1,17 +1,20 @@
-package com.pockwester.forge;
+package com.pockwester.forge.activities;
 
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.app.Activity;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
+
+import com.pockwester.forge.utils.PWApi;
+import com.pockwester.forge.utils.PWApiTask;
+import com.pockwester.forge.R;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -132,7 +135,8 @@ public class AvailabilityActivity extends Activity implements PWApi {
             populateView();
         }
         else if (task == TASKS.UPDATE_AVAILABILITY) {
-            startActivity(new Intent(this, MainActivity.class));
+            getSharedPreferences(student_id, 0).edit().putBoolean("avail_set", true).commit();
+            startActivity( new Intent(this, MainActivity.class) );
         }
     }
 }

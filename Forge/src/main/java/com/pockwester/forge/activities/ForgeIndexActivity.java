@@ -1,20 +1,21 @@
-package com.pockwester.forge;
+package com.pockwester.forge.activities;
 
-import android.content.ContentResolver;
-import android.content.CursorLoader;
+import android.app.Activity;
 import android.content.Intent;
-import android.content.Loader;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.preference.PreferenceManager;
-import android.util.Log;
-import android.view.MenuItem;
-import android.view.View;
 import android.os.Bundle;
-import android.app.Activity;
+import android.preference.PreferenceManager;
 import android.view.Menu;
-import android.widget.AdapterView;
+import android.view.MenuItem;
 import android.widget.ListView;
+
+import com.pockwester.forge.models.CourseInstance;
+import com.pockwester.forge.adapters.CourseInstanceAdapter;
+import com.pockwester.forge.providers.ForgeProvider;
+import com.pockwester.forge.utils.PWApi;
+import com.pockwester.forge.utils.PWApiTask;
+import com.pockwester.forge.R;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -24,8 +25,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class CourseIndexActivity extends Activity implements PWApi {
-
+/**
+ * Created by zack on 11/4/13.
+ */
+public class ForgeIndexActivity extends Activity implements PWApi {
     private List<CourseInstance> instanceList;
     private CourseInstanceAdapter adapter;
     String student_id;
@@ -38,7 +41,7 @@ public class CourseIndexActivity extends Activity implements PWApi {
         ListView listView = (ListView) findViewById(R.id.section_list);
 
         instanceList = new ArrayList<CourseInstance>();
-        adapter = new CourseInstanceAdapter(this, instanceList);
+        adapter = new CourseInstanceAdapter(this, instanceList, CourseInstanceAdapter.TYPES.FORGE);
 
         listView.setAdapter(adapter);
 
@@ -61,46 +64,7 @@ public class CourseIndexActivity extends Activity implements PWApi {
             }
 
             adapter.notifyDataSetChanged();
-
-            /*
-            // Delete '[', ']' and ' ' from string
-            String instance_ids = instanceSet.toString().replaceAll("[\\[\\s\\]]","");
-
-            List<NameValuePair> args = new ArrayList<NameValuePair>();
-            args.add(new BasicNameValuePair("instance_ids", instance_ids));
-
-
-            new PWApiTask(TASKS.INSTANCE_SEARCH, args, this).execute();
-            */
         }
-
-        listView.setOnItemClickListener(new ListView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                SharedPreferences prefs = getSharedPreferences(student_id, 0);
-                Set<String> instanceSet = new HashSet<String>(prefs.getStringSet("instance_ids", new HashSet<String>()));
-
-                String instance_id = view.getTag().toString();
-
-                // update shared prefs
-                instanceSet.remove(instance_id);
-                prefs.edit().putStringSet("instance_ids", instanceSet).apply();
-
-                // update list view
-                instanceList.remove(position);
-                adapter.notifyDataSetChanged();
-
-                // inform api
-                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-                nameValuePairs.add(new BasicNameValuePair("student_id", student_id));
-                nameValuePairs.add(new BasicNameValuePair("instance_id", instance_id));
-                nameValuePairs.add(new BasicNameValuePair("action", "remove"));
-
-                new PWApiTask( TASKS.UPDATE_COURSE, nameValuePairs, CourseIndexActivity.this ).execute();
-
-            }
-        });
     }
 
     @Override
@@ -128,12 +92,6 @@ public class CourseIndexActivity extends Activity implements PWApi {
 
         new PWApiTask(TASKS.INSTANCE_SEARCH, args, this).execute();
     }
-
-    public void openSearchCourse(View v) {
-        Intent intent = new Intent(this, SearchCourseActivity.class);
-        startActivity(intent);
-    }
-
 
     @Override
     public void hasResult(TASKS task, String result) {

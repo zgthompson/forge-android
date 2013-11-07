@@ -24,5 +24,6 @@
     <string name="friday">4</string>
     <string name="saturday">5</string>
     <string name="sunday">6</string>
+    <string name="title_activity_forge_index">ForgeIndexActivity</string>
 
 </resources>

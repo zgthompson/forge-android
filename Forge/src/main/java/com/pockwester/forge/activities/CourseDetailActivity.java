@@ -1,31 +1,27 @@
-package com.pockwester.forge;
+package com.pockwester.forge.activities;
 
 import android.app.ListActivity;
-import android.content.ContentUris;
-import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 
+import com.pockwester.forge.models.CourseInstance;
+import com.pockwester.forge.adapters.CourseInstanceAdapter;
+import com.pockwester.forge.utils.PWApi;
+import com.pockwester.forge.utils.PWApiTask;
+import com.pockwester.forge.R;
+
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 public class CourseDetailActivity extends ListActivity implements PWApi {
@@ -40,7 +36,7 @@ public class CourseDetailActivity extends ListActivity implements PWApi {
         // Create adapter and bind it to list view
         instanceList = new ArrayList<CourseInstance>();
 
-        adapter = new CourseInstanceAdapter(this, instanceList);
+        adapter = new CourseInstanceAdapter(this, instanceList, CourseInstanceAdapter.TYPES.ADD);
 
         setListAdapter(adapter);
 

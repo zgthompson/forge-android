@@ -1,30 +1,39 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".CourseIndexActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context=".CourseIndexActivity">
+    android:orientation="vertical"
+    android:layout_weight="10" >
 
     <ListView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/section_list"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Add a class"
-        android:id="@+id/button"
-        android:layout_below="@+id/section_list"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
-        android:onClick="openSearchCourse"
-        android:textColor="#ff0000"
-        android:textStyle="bold"
-        android:textColorHighlight="#000000" />
-</RelativeLayout>
+        android:layout_weight="5" />
+
+    <RelativeLayout
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:layout_weight="1" >
+        <Button
+            android:layout_alignParentLeft="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add class"
+            android:onClick="openSearchCourse" />
+
+        <Button
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="Done"
+            android:onClick="onDoneClick"
+            android:layout_alignParentRight="true" />
+    </RelativeLayout>
+</LinearLayout>
