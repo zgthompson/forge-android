@@ -60,7 +60,7 @@
             android:label="Add Course" >
         </activity>
 
-        <activity android:name=".activities.ForgeIndexActivity"
+        <activity android:name=".activities.ForgeDetailActivity"
             android:label="Find Group" />
 
     </application>

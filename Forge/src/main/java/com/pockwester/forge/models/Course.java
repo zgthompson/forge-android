@@ -21,9 +21,10 @@ public class Course {
         this.id = courseObject.getString("id");
     }
 
-    public Course(String title, String catalogName) {
+    public Course(String title, String catalogName, String id) {
         this.title = title;
         this.catalogName = catalogName;
+        this.id = id;
     }
 
     public String getTitle() {

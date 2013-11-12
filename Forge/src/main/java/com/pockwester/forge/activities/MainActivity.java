@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -79,6 +80,15 @@ public class MainActivity extends OptionsMenuActivity {
         }
 
         listView.setAdapter(mergeAdapter);
+        listView.setOnItemClickListener(new ListView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent detailIntent = new Intent(MainActivity.this, ForgeDetailActivity.class);
+                detailIntent.putExtra("instance_id", view.getTag().toString());
+                startActivity(detailIntent);
+            }
+        });
     }
 
     private void populateCourseList(Set<String> courseSet) {
@@ -89,7 +99,7 @@ public class MainActivity extends OptionsMenuActivity {
             Cursor cursor = getContentResolver().
                     query(ForgeProvider.COURSE_INSTANCE_CONTENT_URI, projection, where, null, null);
             if (cursor.moveToFirst()) {
-                courseList.add(new Course(cursor.getString(0), cursor.getString(1)));
+                courseList.add(new Course(cursor.getString(0), cursor.getString(1), instance));
             }
            cursor.close();
         }

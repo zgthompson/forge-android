@@ -1,5 +1,6 @@
 package com.pockwester.forge.activities;
 
+import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -8,6 +9,7 @@ import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.pockwester.forge.models.CourseInstance;
@@ -24,7 +26,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class CourseDetailActivity extends ListActivity implements PWApi {
+public class CourseDetailActivity extends Activity implements PWApi {
 
     private CourseInstanceAdapter adapter;
     private List<CourseInstance> instanceList;
@@ -32,13 +34,46 @@ public class CourseDetailActivity extends ListActivity implements PWApi {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_course_index2);
+
+        ListView listView = (ListView) findViewById(R.id.section_list);
 
         // Create adapter and bind it to list view
         instanceList = new ArrayList<CourseInstance>();
 
         adapter = new CourseInstanceAdapter(this, instanceList, CourseInstanceAdapter.TYPES.ADD);
 
-        setListAdapter(adapter);
+        listView.setAdapter(adapter);
+
+        listView.setOnItemClickListener(new ListView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String student_id = PreferenceManager.getDefaultSharedPreferences(CourseDetailActivity.this).getString("user", "");
+                SharedPreferences prefs = getSharedPreferences(student_id, 0);
+                Set<String> instance_ids = new HashSet<String>(prefs.getStringSet("instance_ids", new HashSet<String>()));
+
+                String instance_id = view.getTag().toString();
+
+                if (!instance_ids.contains(instance_id)) {
+                    //update course list for student on android
+                    instance_ids.add(instance_id);
+                    prefs.edit().putStringSet("instance_ids", instance_ids).apply();
+                    CourseInstance.addToDB(instanceList.get(position), CourseDetailActivity.this);
+
+                    // inform api that course has been added
+                    List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+                    nameValuePairs.add(new BasicNameValuePair("student_id", student_id));
+                    nameValuePairs.add(new BasicNameValuePair("instance_id", instance_id));
+                    nameValuePairs.add(new BasicNameValuePair("action", "add"));
+
+                    new PWApiTask( TASKS.UPDATE_COURSE, nameValuePairs, CourseDetailActivity.this ).execute();
+                }
+                else {
+                    startActivity(new Intent(CourseDetailActivity.this, CourseIndexActivity.class));
+                }
+            }
+        });
 
         String course_id = getIntent().getStringExtra("course_id");
 
@@ -82,35 +117,5 @@ public class CourseDetailActivity extends ListActivity implements PWApi {
         else if (task == TASKS.UPDATE_COURSE) {
             startActivity(new Intent(this, CourseIndexActivity.class));
         }
-    }
-
-    @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
-
-        String student_id = PreferenceManager.getDefaultSharedPreferences(this).getString("user", "");
-        SharedPreferences prefs = getSharedPreferences(student_id, 0);
-        Set<String> instance_ids = new HashSet<String>(prefs.getStringSet("instance_ids", new HashSet<String>()));
-
-        String instance_id = v.getTag().toString();
-
-        if (!instance_ids.contains(instance_id)) {
-            //update course list for student on android
-            instance_ids.add(instance_id);
-            prefs.edit().putStringSet("instance_ids", instance_ids).apply();
-            CourseInstance.addToDB(instanceList.get(position), this);
-
-            // inform api that course has been added
-            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-            nameValuePairs.add(new BasicNameValuePair("student_id", student_id));
-            nameValuePairs.add(new BasicNameValuePair("instance_id", instance_id));
-            nameValuePairs.add(new BasicNameValuePair("action", "add"));
-
-            new PWApiTask( TASKS.UPDATE_COURSE, nameValuePairs, this ).execute();
-        }
-        else {
-            startActivity(new Intent(this, CourseIndexActivity.class));
-        }
-
     }
 }

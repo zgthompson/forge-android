@@ -16,7 +16,8 @@ public interface PWApi{
         INSTANCE_SEARCH("grab_instances"),
         UPDATE_COURSE("update_student_courses"),
         UPDATE_AVAILABILITY("update_availability"),
-        GET_AVAILABILITY("grab_availability");
+        GET_AVAILABILITY("grab_availability"),
+        LOOKING_FOR_GROUP("set_lfg_flag");
 
         private TASKS(final String text) {
             this.text = text;

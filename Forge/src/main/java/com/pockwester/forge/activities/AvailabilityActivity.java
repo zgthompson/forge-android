@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -27,7 +28,7 @@ import java.util.List;
  * Window that shows the availability of the user. This requires that the
  * user be authenticated through the PWApi services.
  */
-public class AvailabilityActivity extends Activity implements PWApi {
+public class AvailabilityActivity extends OptionsMenuActivity implements PWApi {
 
     private List<Character> availList;
     private String student_id;
@@ -46,6 +47,24 @@ public class AvailabilityActivity extends Activity implements PWApi {
         nameValuePairs.add(new BasicNameValuePair("student_id", student_id));
 
         new PWApiTask( TASKS.GET_AVAILABILITY, nameValuePairs, this ).execute();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        return true;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(myIntent);
+                break;
+        }
+
+        return true;
     }
 
     public void onToggleClicked(View view) {
@@ -117,13 +136,6 @@ public class AvailabilityActivity extends Activity implements PWApi {
         result += (index + 7) % 12 + 1;
         result += index > 3 ? " PM" : " AM";
         return result;
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.availability, menu);
-        return true;
     }
 
     @Override

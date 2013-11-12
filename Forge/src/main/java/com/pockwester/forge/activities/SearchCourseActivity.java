@@ -1,6 +1,7 @@
 package com.pockwester.forge.activities;
 
 import android.app.ActionBar;
+import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -31,7 +33,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class SearchCourseActivity extends ListActivity implements PWApi {
+public class SearchCourseActivity extends Activity implements PWApi {
 
     private String query;
     private ArrayAdapter<Course> adapter;
@@ -42,6 +44,9 @@ public class SearchCourseActivity extends ListActivity implements PWApi {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_course_index2);
+
+        ListView listView = (ListView) findViewById(R.id.section_list);
 
         // Create adapter and bind it to list view
         query = "";
@@ -50,7 +55,17 @@ public class SearchCourseActivity extends ListActivity implements PWApi {
         courseList = new ArrayList<Course>();
         adapter = new CourseAdapter(this, courseList);
 
-        setListAdapter(adapter);
+        listView.setAdapter(adapter);
+
+        listView.setOnItemClickListener(new ListView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent detailIntent = new Intent(SearchCourseActivity.this, CourseDetailActivity.class);
+                detailIntent.putExtra("course_id", view.getTag().toString());
+                startActivity(detailIntent);
+            }
+        });
 
 
 
@@ -133,12 +148,6 @@ public class SearchCourseActivity extends ListActivity implements PWApi {
         adapter.notifyDataSetChanged();
 
         searching = false;
-    }
-
-    public void onListItemClick(ListView l, View v, int position, long id) {
-        Intent detailIntent = new Intent(this, CourseDetailActivity.class);
-        detailIntent.putExtra("course_id", v.getTag().toString());
-        startActivity(detailIntent);
     }
 
     private void checkForUpdates() {

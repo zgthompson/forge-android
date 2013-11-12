@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.pockwester.forge.R;
 import com.pockwester.forge.models.Course;
 
 import java.util.List;
@@ -20,7 +21,7 @@ public class CourseAdapter extends ArrayAdapter<Course> {
     private final Activity context;
 
     public CourseAdapter(Activity context, List<Course> list) {
-        super(context, android.R.layout.simple_list_item_2, list);
+        super(context, R.layout.course_list_item, list);
         this.context = context;
         this.list= list;
     }
@@ -30,14 +31,14 @@ public class CourseAdapter extends ArrayAdapter<Course> {
 
         if (convertView == null) {
             LayoutInflater inflator = context.getLayoutInflater();
-            view = inflator.inflate(android.R.layout.simple_list_item_2, null);
+            view = inflator.inflate(R.layout.course_list_item, null);
         }
         else {
             view = convertView;
         }
 
-        ((TextView) view.findViewById(android.R.id.text1)).setText(list.get(pos).getCatalogName());
-        ((TextView) view.findViewById(android.R.id.text2)).setText(list.get(pos).getTitle());
+        ((TextView) view.findViewById(R.id.text1)).setText(list.get(pos).getCatalogName());
+        ((TextView) view.findViewById(R.id.text2)).setText(list.get(pos).getTitle());
         view.setTag(list.get(pos).getId());
 
         return view;
