@@ -1,6 +1,5 @@
 package com.pockwester.forge.activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -9,11 +8,9 @@ import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.pockwester.forge.models.CourseInstance;
-import com.pockwester.forge.adapters.CourseInstanceAdapter;
 import com.pockwester.forge.providers.ForgeProvider;
 import com.pockwester.forge.utils.PWApi;
 import com.pockwester.forge.utils.PWApiTask;
@@ -44,7 +41,7 @@ public class ForgeDetailActivity extends OptionsMenuActivity implements PWApi {
 
         instance_id= getIntent().getStringExtra("instance_id");
 
-        String[] projection = new String[] {  CourseInstance.ROW_TITLE, CourseInstance.ROW_CATALOG_NAME };
+        String[] projection = new String[] {  CourseInstance.ROW_TITLE, CourseInstance.ROW_SUBJECT_NO };
         String where = CourseInstance.ROW_COURSE_INSTANCE_ID + "=" + instance_id;
         Cursor cursor = getContentResolver().
                 query(ForgeProvider.COURSE_INSTANCE_CONTENT_URI, projection, where, null, null);
@@ -60,6 +57,12 @@ public class ForgeDetailActivity extends OptionsMenuActivity implements PWApi {
         student_id = PreferenceManager.getDefaultSharedPreferences(this).getString("user", "");
         SharedPreferences prefs = getSharedPreferences(student_id, 0);
 
+        // updating looking for group ids in shared prefs
+        Set<String> looking_ids = new HashSet<String>(prefs.getStringSet("looking_ids", new HashSet<String>()));
+        looking_ids.add(instance_id);
+        prefs.edit().putStringSet("looking_ids", looking_ids).commit();
+
+        // notify api
         List<NameValuePair> args = new ArrayList<NameValuePair>();
         args.add(new BasicNameValuePair("student_id", student_id));
         args.add(new BasicNameValuePair("instance_id", instance_id));

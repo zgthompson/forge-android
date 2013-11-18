@@ -75,7 +75,7 @@ public class LoginActivity extends Activity implements PWApi {
             prefsEditor.putString("username", attemptUserName).commit();
             prefsEditor.putBoolean("courses_set", true).commit();
 
-            startActivity( new Intent(this, MainActivity.class) );
+            startActivity( new Intent(this, SplashScreen.class) );
             this.finish();
         }
         else

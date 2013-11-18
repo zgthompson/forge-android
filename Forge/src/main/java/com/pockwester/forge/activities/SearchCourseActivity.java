@@ -2,7 +2,6 @@ package com.pockwester.forge.activities;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -16,8 +15,9 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import com.pockwester.forge.adapters.TwoLineAdapter;
 import com.pockwester.forge.models.Course;
-import com.pockwester.forge.adapters.CourseAdapter;
+import com.pockwester.forge.models.TwoLine;
 import com.pockwester.forge.utils.PWApi;
 import com.pockwester.forge.utils.PWApiTask;
 import com.pockwester.forge.R;
@@ -36,8 +36,8 @@ import java.util.TimerTask;
 public class SearchCourseActivity extends Activity implements PWApi {
 
     private String query;
-    private ArrayAdapter<Course> adapter;
-    private List<Course> courseList;
+    private ArrayAdapter<TwoLine> adapter;
+    private List<TwoLine> courseList;
     private boolean searching;
     private boolean newQuery;
     private Timer timer;
@@ -52,8 +52,8 @@ public class SearchCourseActivity extends Activity implements PWApi {
         query = "";
         searching = false;
         newQuery = false;
-        courseList = new ArrayList<Course>();
-        adapter = new CourseAdapter(this, courseList);
+        courseList = new ArrayList<TwoLine>();
+        adapter = new TwoLineAdapter(this, courseList);
 
         listView.setAdapter(adapter);
 

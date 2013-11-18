@@ -8,20 +8,20 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.pockwester.forge.R;
-import com.pockwester.forge.models.Course;
+import com.pockwester.forge.models.TwoLine;
 
 import java.util.List;
 
 /**
- * Created by zack on 10/16/13.
+ * Created by zack on 11/17/13.
  */
-public class CourseAdapter extends ArrayAdapter<Course> {
+public class TwoLineAdapter extends ArrayAdapter<TwoLine> {
 
-    private final List<Course> list;
+    private final List<TwoLine> list;
     private final Activity context;
 
-    public CourseAdapter(Activity context, List<Course> list) {
-        super(context, R.layout.course_list_item, list);
+    public TwoLineAdapter(Activity context, List<TwoLine> list) {
+        super(context, R.layout.two_line_list_item, list);
         this.context = context;
         this.list= list;
     }
@@ -30,15 +30,15 @@ public class CourseAdapter extends ArrayAdapter<Course> {
         View view = null;
 
         if (convertView == null) {
-            LayoutInflater inflator = context.getLayoutInflater();
-            view = inflator.inflate(R.layout.course_list_item, null);
+            LayoutInflater inflater = context.getLayoutInflater();
+            view = inflater.inflate(R.layout.two_line_list_item, null);
         }
         else {
             view = convertView;
         }
 
-        ((TextView) view.findViewById(R.id.text1)).setText(list.get(pos).getCatalogName());
-        ((TextView) view.findViewById(R.id.text2)).setText(list.get(pos).getTitle());
+        ((TextView) view.findViewById(R.id.text1)).setText(list.get(pos).getLineOne());
+        ((TextView) view.findViewById(R.id.text2)).setText(list.get(pos).getLineTwo());
         view.setTag(list.get(pos).getId());
 
         return view;

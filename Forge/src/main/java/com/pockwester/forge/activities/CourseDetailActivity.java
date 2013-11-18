@@ -10,10 +10,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.pockwester.forge.adapters.ThreeLineAdapter;
 import com.pockwester.forge.models.CourseInstance;
-import com.pockwester.forge.adapters.CourseInstanceAdapter;
+import com.pockwester.forge.models.ThreeLine;
 import com.pockwester.forge.utils.PWApi;
 import com.pockwester.forge.utils.PWApiTask;
 import com.pockwester.forge.R;
@@ -28,8 +30,8 @@ import java.util.Set;
 
 public class CourseDetailActivity extends Activity implements PWApi {
 
-    private CourseInstanceAdapter adapter;
-    private List<CourseInstance> instanceList;
+    private ArrayAdapter<ThreeLine> adapter;
+    private List<ThreeLine> instanceList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,9 +41,9 @@ public class CourseDetailActivity extends Activity implements PWApi {
         ListView listView = (ListView) findViewById(R.id.section_list);
 
         // Create adapter and bind it to list view
-        instanceList = new ArrayList<CourseInstance>();
+        instanceList = new ArrayList<ThreeLine>();
 
-        adapter = new CourseInstanceAdapter(this, instanceList, CourseInstanceAdapter.TYPES.ADD);
+        adapter = new ThreeLineAdapter(this, instanceList);
 
         listView.setAdapter(adapter);
 
@@ -59,7 +61,7 @@ public class CourseDetailActivity extends Activity implements PWApi {
                     //update course list for student on android
                     instance_ids.add(instance_id);
                     prefs.edit().putStringSet("instance_ids", instance_ids).apply();
-                    CourseInstance.addToDB(instanceList.get(position), CourseDetailActivity.this);
+                    CourseInstance.addToDB((CourseInstance) instanceList.get(position), CourseDetailActivity.this);
 
                     // inform api that course has been added
                     List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
@@ -108,7 +110,7 @@ public class CourseDetailActivity extends Activity implements PWApi {
             instanceList.clear();
 
 
-            for (CourseInstance instance : CourseInstance.createInstanceCollection(result)) {
+            for (CourseInstance instance : CourseInstance.createInstanceList(result)) {
                 instanceList.add(instance);
             }
 

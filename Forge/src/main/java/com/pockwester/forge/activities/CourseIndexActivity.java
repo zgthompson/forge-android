@@ -4,16 +4,18 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.os.Bundle;
-import android.app.Activity;
 import android.view.Menu;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.pockwester.forge.adapters.ThreeLineAdapter;
 import com.pockwester.forge.models.CourseInstance;
-import com.pockwester.forge.adapters.CourseInstanceAdapter;
+import com.pockwester.forge.models.ThreeLine;
 import com.pockwester.forge.providers.ForgeProvider;
 import com.pockwester.forge.utils.PWApi;
 import com.pockwester.forge.utils.PWApiTask;
@@ -30,8 +32,8 @@ import java.util.Set;
 public class CourseIndexActivity extends OptionsMenuActivity implements PWApi {
 
     private static final int REFRESH_ID = 0;
-    private List<CourseInstance> instanceList;
-    private CourseInstanceAdapter adapter;
+    private List<ThreeLine> instanceList;
+    private ArrayAdapter<ThreeLine> adapter;
     String student_id;
 
     @Override
@@ -41,8 +43,8 @@ public class CourseIndexActivity extends OptionsMenuActivity implements PWApi {
 
         ListView listView = (ListView) findViewById(R.id.section_list);
 
-        instanceList = new ArrayList<CourseInstance>();
-        adapter = new CourseInstanceAdapter(this, instanceList, CourseInstanceAdapter.TYPES.REMOVE);
+        instanceList = new ArrayList<ThreeLine>();
+        adapter = new ThreeLineAdapter(this, instanceList);
 
         listView.setAdapter(adapter);
 
@@ -52,16 +54,24 @@ public class CourseIndexActivity extends OptionsMenuActivity implements PWApi {
 
         if (!instanceSet.isEmpty()) {
             instanceList.clear();
-            String[] projection = new String[] { CourseInstance.ROW_COURSE_INSTANCE_ID,
-                    CourseInstance.ROW_CATALOG_NAME, CourseInstance.ROW_TITLE,
-                    CourseInstance.ROW_SECTION_ID, CourseInstance.ROW_LOCATION,
-                    CourseInstance.ROW_COMPONENT, CourseInstance.ROW_TIME, CourseInstance.ROW_DAY };
+            String[] projection = new String[] { CourseInstance.ROW_COURSE_INSTANCE_ID, CourseInstance.ROW_TITLE,
+                    CourseInstance.ROW_SUBJECT_NO, CourseInstance.ROW_TIME };
 
+            String id, title, subjectNo, time;
             for (String instance : instanceSet) {
+                Log.d("forge", "instance: " + instance);
                 String where = CourseInstance.ROW_COURSE_INSTANCE_ID + "=" + instance;
                 Cursor instanceCursor = getContentResolver().
                         query(ForgeProvider.COURSE_INSTANCE_CONTENT_URI, projection, where, null, null);
-                instanceList.add(new CourseInstance(instanceCursor));
+
+                instanceCursor.moveToFirst();
+
+                id = instanceCursor.getString(0);
+                title = instanceCursor.getString(1);
+                subjectNo = instanceCursor.getString(2);
+                time = instanceCursor.getString(3);
+
+                instanceList.add(new CourseInstance(title, subjectNo, id, time));
             }
 
             adapter.notifyDataSetChanged();
@@ -158,7 +168,7 @@ public class CourseIndexActivity extends OptionsMenuActivity implements PWApi {
             Set<String> newInstanceSet = new HashSet<String>();
 
             // create course instance objects
-            for (CourseInstance instance : CourseInstance.createInstanceCollection(result)) {
+            for (CourseInstance instance : CourseInstance.createInstanceList(result)) {
 
                 // add for list view
                 instanceList.add(instance);

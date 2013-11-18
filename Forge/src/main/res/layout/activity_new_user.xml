@@ -3,16 +3,14 @@
 <TableLayout
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:gravity="center"
-    android:paddingLeft="100dp"
-    style="@style/Global"
+    android:layout_marginTop="20dp"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:baselineAligned="true">
 
     <TableRow
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_gravity="center_horizontal">
+        android:gravity="center_horizontal" >
 
         <TextView
             android:layout_width="wrap_content"
@@ -22,13 +20,13 @@
             android:gravity="center"
             android:id="@+id/textView"
             android:layout_column="0"
-            android:layout_span="2"
-            android:layout_marginBottom="50dp"/>
+            android:layout_span="2" />
     </TableRow>
 
     <TableRow
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+        android:layout_height="fill_parent"
+        android:gravity="center_horizontal" >
 
         <TextView
             android:layout_width="wrap_content"
@@ -44,13 +42,13 @@
     <TableRow
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_gravity="center_horizontal">
+        android:gravity="center_horizontal">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="UserName"
+            android:text="Username"
             android:id="@+id/textView"
             android:layout_column="0" />
 
@@ -67,7 +65,7 @@
     <TableRow
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_gravity="center_horizontal">
+        android:gravity="center_horizontal">
 
         <TextView
             android:layout_width="wrap_content"
@@ -89,7 +87,8 @@
 
     <TableRow
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+        android:layout_height="fill_parent"
+        android:gravity="center_horizontal" >
 
         <TextView
             android:layout_width="wrap_content"
@@ -112,7 +111,8 @@
 
     <TableRow
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+        android:layout_height="fill_parent"
+        android:gravity="center_horizontal">
 
         <Button
             android:layout_width="wrap_content"
