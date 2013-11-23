@@ -25,17 +25,21 @@ public class StudyGroup extends CourseIdentifier implements ThreeLine {
     public static final String ROW_SUBJECT_NO= "subject_no";
     public static final String ROW_TITLE = "title";
     public static final String ROW_TIME = "time";
+    public static final String ROW_STUDENTS = "students";
 
     String time;
+    String students;
 
     public StudyGroup(JSONObject courseObject) throws JSONException {
         super(courseObject.getString("title"), courseObject.getString("subject_no"), courseObject.getString("id"));
         this.time = courseObject.getString("time");
+        this.students = courseObject.getJSONArray("students").toString().replaceAll("[\\[\"\\]]", "").replaceAll(",", ", ");
     }
 
-    public StudyGroup(String title, String subjectNo, String id, String time) {
+    public StudyGroup(String title, String subjectNo, String id, String time, String students) {
         super(title, subjectNo, id);
         this.time = time;
+        this.students = students;
     }
     @Override
     public String getLineThree() {
@@ -65,6 +69,7 @@ public class StudyGroup extends CourseIdentifier implements ThreeLine {
         values.put(ROW_SUBJECT_NO, subjectNo);
         values.put(ROW_TIME, time);
         values.put(ROW_TITLE, title);
+        values.put(ROW_STUDENTS, students);
 
         return values;
     }

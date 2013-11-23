@@ -41,6 +41,12 @@ public class ForgeDetailActivity extends OptionsMenuActivity implements PWApi {
 
         instance_id= getIntent().getStringExtra("instance_id");
 
+        Set<String> looking_ids = prefs.getStringSet("looking_ids", new HashSet<String>());
+
+        if (looking_ids.contains(instance_id)) {
+            findViewById(R.id.looking_button).setVisibility(View.GONE);
+        }
+
         String[] projection = new String[] {  CourseInstance.ROW_TITLE, CourseInstance.ROW_SUBJECT_NO };
         String where = CourseInstance.ROW_COURSE_INSTANCE_ID + "=" + instance_id;
         Cursor cursor = getContentResolver().

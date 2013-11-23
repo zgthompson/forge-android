@@ -19,7 +19,9 @@ public interface PWApi{
         GET_AVAILABILITY("grab_availability"),
         LOOKING_FOR_GROUP("set_lfg_flag"),
         GRAB_UPDATES("grab_updates"),
-        GROUP_SEARCH("grab_study_groups");
+        GROUP_SEARCH("grab_study_groups"),
+        GET_MESSAGES("get_messages"),
+        SEND_MESSAGE("send_message");
 
         private TASKS(final String text) {
             this.text = text;

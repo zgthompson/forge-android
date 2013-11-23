@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -111,9 +112,18 @@ public class MainActivity extends OptionsMenuActivity {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent detailIntent = new Intent(MainActivity.this, ForgeDetailActivity.class);
-                detailIntent.putExtra("instance_id", view.getTag().toString());
-                startActivity(detailIntent);
+                Object item = parent.getItemAtPosition(position);
+                if (item instanceof StudyGroup) {
+                    Intent groupIntent = new Intent(MainActivity.this, GroupDetailActivity.class);
+                    groupIntent.putExtra("group_id", view.getTag().toString());
+                    startActivity(groupIntent);
+                }
+                else if (item instanceof Course) {
+                    Intent detailIntent = new Intent(MainActivity.this, ForgeDetailActivity.class);
+                    detailIntent.putExtra("instance_id", view.getTag().toString());
+                    startActivity(detailIntent);
+                }
+
             }
         });
     }
@@ -138,14 +148,14 @@ public class MainActivity extends OptionsMenuActivity {
     }
 
     private void populateGroupList(Set<String> groupSet) {
-        String[] projection = new String[] {  StudyGroup.ROW_TITLE, StudyGroup.ROW_SUBJECT_NO, StudyGroup.ROW_TIME };
+        String[] projection = new String[] {  StudyGroup.ROW_TITLE, StudyGroup.ROW_SUBJECT_NO, StudyGroup.ROW_TIME, StudyGroup.ROW_STUDENTS };
 
         for (String group : groupSet) {
             String where = StudyGroup.ROW_STUDY_GROUP_ID + "=" + group;
             Cursor cursor = getContentResolver().
                     query(ForgeProvider.STUDY_GROUP_CONTENT_URI, projection, where, null, null);
             if (cursor.moveToFirst()) {
-                groupList.add(new StudyGroup(cursor.getString(0), cursor.getString(1), group, cursor.getString(2)));
+                groupList.add(new StudyGroup(cursor.getString(0), cursor.getString(1), group, cursor.getString(2), cursor.getString(3)));
             }
            cursor.close();
         }

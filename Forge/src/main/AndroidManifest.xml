@@ -63,6 +63,9 @@
         <activity android:name=".activities.ForgeDetailActivity"
             android:label="Find Group" />
 
+        <activity android:name=".activities.GroupDetailActivity"
+            android:label="Study Group" />
+
     </application>
 
 </manifest>

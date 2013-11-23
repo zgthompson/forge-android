@@ -212,6 +212,7 @@ public class ForgeProvider extends ContentProvider {
                 StudyGroup.ROW_STUDY_GROUP_ID+ " TEXT," +
                 StudyGroup.ROW_SUBJECT_NO + " TEXT," +
                 StudyGroup.ROW_TITLE + " TEXT," +
+                StudyGroup.ROW_STUDENTS + " TEXT," +
                 StudyGroup.ROW_TIME + " TEXT" + ");";
 
         private static final String CREATE_TABLE_COURSE_INSTANCE = "create table " +
